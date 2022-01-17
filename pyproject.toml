@@ -6,8 +6,15 @@ authors = ["AgRenaud <renaud.aguirrechambilla@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "3.8.10"
+SQLAlchemy = "^1.4.29"
+fastapi = "^0.72.0"
+psycopg2-binary = "^2.9.3"
+envyaml = "^1.10.211231"
 
 [tool.poetry.dev-dependencies]
+coverage = {version = "^6.2", extras = ["toml"]}
+unittest = "^0.0"
+"testing.postgresql" = "^1.3.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
