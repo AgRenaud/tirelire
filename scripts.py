@@ -8,7 +8,7 @@ def test():
 
 def report():
     subprocess.run(
-        ["python", "-m", "coverage", "report"]
+        ["python", "-m", "coverage", "report", "-m"]
     )
 
 def audit():
