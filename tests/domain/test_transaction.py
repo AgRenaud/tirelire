@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 from parameterized import parameterized
 
 from app.domain import Value, Transaction, Currency
@@ -31,4 +31,14 @@ class TestValue(TestCase):
 
 
 class TestTransaction(TestCase):
-    pass
+    
+    @parameterized.expand([
+        (Currency.EUR, ),
+        (Currency.USD, ),
+    ])
+    def test_currency_property_must_return_value(self, curr: Currency):
+        value = mock.patch("app.domain.Value")
+        value.currency = curr
+
+        t = Transaction("uuid", "My transaction", value)
+        self.assertEqual(t.currency, curr)

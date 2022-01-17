@@ -21,3 +21,7 @@ class Transaction:
     id: str
     name: str
     value: Value
+
+    @property
+    def currency(self):
+        return self.value.currency
