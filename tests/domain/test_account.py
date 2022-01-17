@@ -19,3 +19,9 @@ class TestAccount(TestCase):
         t1.currency = Currency.EUR
         with self.assertRaises(ValueError):
             my_account.add_transaction(t1)
+
+    def test_compute_balance_must_return_value(self):
+        pass
+
+    def test_compute_balance_category_must_return_value(self):
+        pass
