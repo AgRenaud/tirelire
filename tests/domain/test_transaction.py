@@ -29,7 +29,6 @@ class TestValue(TestCase):
             v3 = v1 + v2
 
 
-
 class TestTransaction(TestCase):
     
     @parameterized.expand([
