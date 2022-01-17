@@ -1,0 +1,12 @@
+{
+    "terminal.integrated.allowChords": false,
+    "terminal.integrated.fontFamily": "Menlo for Powerline",
+    "python.venvPath": [
+        "/Users/raguirre/meelo-projects/ocr/ocr/.venv"
+    ],
+    "workbench.tree.indent": 12,
+    "workbench.tree.renderIndentGuides": "always",
+    "workbench.colorCustomizations": {
+        "tree.indentGuidesStroke": "#008070"
+    },
+}
