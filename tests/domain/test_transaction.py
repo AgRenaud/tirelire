@@ -1,5 +1,6 @@
 from unittest import TestCase, mock
 from parameterized import parameterized
+from datetime import date
 
 from app.domain import Value, Transaction, Currency
 
@@ -39,5 +40,5 @@ class TestTransaction(TestCase):
         value = mock.patch("app.domain.Value")
         value.currency = curr
 
-        t = Transaction("uuid", "My transaction", value)
+        t = Transaction("uuid", "My transaction", date.today(), value)
         self.assertEqual(t.currency, curr)

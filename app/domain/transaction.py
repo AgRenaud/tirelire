@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import date
 
 from app.domain.currency import Currency
 from app.domain.category import Category
@@ -20,6 +21,7 @@ class Value:
 class Transaction:
     id: str
     name: str
+    date: date
     value: Value
 
     @property
