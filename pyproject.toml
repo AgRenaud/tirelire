@@ -3,6 +3,9 @@ name = "bank-transaction-categorization"
 version = "0.1.0"
 description = ""
 authors = ["AgRenaud <renaud.aguirrechambilla@gmail.com>"]
+packages = [
+  { include = "./scripts.py" }
+]
 
 [tool.poetry.dependencies]
 python = "3.8.10"
@@ -15,7 +18,17 @@ envyaml = "^1.10.211231"
 coverage = {version = "^6.2", extras = ["toml"]}
 unittest = "^0.0"
 "testing.postgresql" = "^1.3.0"
+parameterized = "^0.8.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+test = 'scripts:test'
+report = 'scripts:report'
+audit = 'scripts:audit'
+
+[tool.coverage.run]
+source=['app']
+omit=['*/__init__.py']
