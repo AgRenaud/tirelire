@@ -1,7 +1,14 @@
 from unittest import TestCase
 from unittest.mock import patch
+from datetime import date
 
-from app.domain import Currency, Category, Account
+from app.domain import (
+    Currency, 
+    Category, 
+    Account, 
+    Value, 
+    Transaction
+)
 
 
 class TestAccount(TestCase):
@@ -21,7 +28,48 @@ class TestAccount(TestCase):
             my_account.add_transaction(t1)
 
     def test_compute_balance_must_return_value(self):
-        pass
+        t1 = Transaction(
+            "uuid_1", 
+            "My transaction one", 
+            date.today(), 
+            Value(12.36, Currency.EUR)
+        )
+
+        t2 = Transaction(
+            "uuid_2", 
+            "My transaction two", 
+            date.today(), 
+            Value(29.78, Currency.EUR)
+        )
+        my_account = Account("uuid", Currency.EUR, [t1, t2])
+        self.assertEqual(my_account.compute_balance(), t1.value + t2.value)
 
     def test_compute_balance_category_must_return_value(self):
-        pass
+        t1 = Transaction(
+            "uuid_1", 
+            "My transaction one", 
+            date.today(), 
+            Value(1290.36, Currency.EUR),
+            Category.SALARY
+        )
+
+        t2 = Transaction(
+            "uuid_2", 
+            "My transaction two", 
+            date.today(), 
+            Value(29.78, Currency.EUR),
+            Category.HOBBIES_SPORT
+        )
+
+        t3 = Transaction(
+            "uuid_3", 
+            "My transaction three", 
+            date.today(), 
+            Value(4.99, Currency.EUR),
+            Category.HOBBIES_SPORT
+        )
+
+        my_account = Account("uuid", Currency.EUR, [t1, t2, t3])
+        self.assertEqual(my_account.compute_category_balance(Category.SALARY), t1.value)
+        self.assertEqual(my_account.compute_category_balance(Category.HOBBIES_SPORT), t2.value + t3.value)
+        self.assertEqual(my_account.compute_category_balance(Category.HOUSING), Value(0.0, Currency.EUR))

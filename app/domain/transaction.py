@@ -9,7 +9,6 @@ from app.domain.category import Category
 class Value:
     amount: float
     currency: Currency = Currency.EUR
-    category: Category = Category.UNKNOWN
 
     def __add__(self, other):
         if not other.currency == self.currency:
@@ -23,6 +22,7 @@ class Transaction:
     name: str
     date: date
     value: Value
+    category: Category = Category.UNKNOWN
 
     @property
     def currency(self):
