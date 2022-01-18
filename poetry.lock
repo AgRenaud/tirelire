@@ -86,6 +86,17 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "parameterized"
+version = "0.8.1"
+description = "Parameterized testing with any Python test framework"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.extras]
+dev = ["jinja2"]
+
+[[package]]
 name = "pg8000"
 version = "1.23.0"
 description = "PostgreSQL interface library"
@@ -245,7 +256,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.10"
-content-hash = "8933fdb707c361ce77a5988b04675360465afb4e946918f5ed6abef8efa37723"
+content-hash = "2bb705d02ac0f1273e740ea32a3b61ac467c41380196713d0c0886587193a022"
 
 [metadata.files]
 anyio = [
@@ -373,6 +384,10 @@ greenlet = [
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
     {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
+]
+parameterized = [
+    {file = "parameterized-0.8.1-py2.py3-none-any.whl", hash = "sha256:9cbb0b69a03e8695d68b3399a8a5825200976536fe1cb79db60ed6a4c8c9efe9"},
+    {file = "parameterized-0.8.1.tar.gz", hash = "sha256:41bbff37d6186430f77f900d777e5bb6a24928a1c46fb1de692f8b52b8833b5c"},
 ]
 pg8000 = [
     {file = "pg8000-1.23.0-py3-none-any.whl", hash = "sha256:e339f09f676629c0806c8dcc6fdc89ca6dba817e20702448c5172e85d133419d"},
