@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from app.domain.transaction import Transaction, Value
+from app.domain.transaction.transaction import Transaction, Value
 from app.domain.currency import Currency
 from app.domain.category import Category
 

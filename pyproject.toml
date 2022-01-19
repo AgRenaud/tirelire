@@ -32,3 +32,9 @@ audit = 'scripts:audit'
 [tool.coverage.run]
 source=['app']
 omit=['*/__init__.py']
+
+[tool.coverage.report]
+exclude_lines=[
+    "pragma: no cover",
+    "raise NotImplementedError"
+]
