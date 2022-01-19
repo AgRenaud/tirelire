@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, DateTime, Enum
 from sqlalchemy.orm import relationship
 from typing import List
 
-from app.infrastructure.persistence.db.models.base import Base
+from app.infrastructure.persistence.db.engine.database import Base
 from app.domain import Account, Currency, Transaction
 
 

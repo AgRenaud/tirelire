@@ -3,7 +3,7 @@ import datetime
 from sqlalchemy import Column, Float, Integer, DateTime, Enum, Text
 from sqlalchemy.orm import relationship
 
-from app.infrastructure.persistence.db.models.base import Base
+from app.infrastructure.persistence.db.engine.database import Base
 from app.domain import Transaction, Currency, Category, Value
 
 
