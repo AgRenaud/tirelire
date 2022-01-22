@@ -25,5 +25,9 @@ class Transaction:
     category: Category = Category.UNKNOWN
 
     @property
+    def amount(self):
+        return self.value.amount
+
+    @property
     def currency(self):
         return self.value.currency
