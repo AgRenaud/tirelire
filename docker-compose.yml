@@ -1,0 +1,5 @@
+  postgres:
+    image: postgres:latest
+    env_file: dev-database.conf
+    ports:
+      - "54321:5432"
