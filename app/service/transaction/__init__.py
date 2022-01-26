@@ -1,1 +1,0 @@
-from app.service.transaction.transaction_service_dto import TransactionReadModel 
