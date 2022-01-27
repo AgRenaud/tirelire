@@ -1,5 +1,22 @@
+version: "3"
+
+services:
+  api:
+    build: .
+    environment: 
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: psswd1234
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "test"
+    ports:
+      - "8000:8000"
+    command: ["uvicorn", "app.api:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"]
+    volumes:
+      - "./app:/app"
+    depends_on:
+      - postgres
   postgres:
     image: postgres:latest
-    env_file: dev-database.conf
-    ports:
-      - "54321:5432"
+    env_file: 
+      - dev-database.conf
