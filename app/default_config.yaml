@@ -1,0 +1,10 @@
+
+logging:
+  config:
+    path: ${APP_PATH}/default_logging.ini
+postgres:
+  user: ${POSTGRES_USER}
+  password: ${POSTGRES_PASSWORD}
+  host: ${POSTGRES_HOST}
+  db_name: ${POSTGRES_DB}
+  port: ${POSTGRES_PORT}

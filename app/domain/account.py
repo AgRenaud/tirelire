@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import date
 from typing import List
 
 from app.domain.transaction import Transaction
@@ -15,7 +16,8 @@ class Account:
     def __hash__(self):
         return hash(self.id)
 
-    def add_transaction(self, new_transaction: Transaction) -> None:
+    def add_transaction(self, name: str, date: date, value: float, currency: str, category: str) -> None:
+        new_transaction = Transaction(name, date, value, Currency[currency], Category[category])
         if not new_transaction.currency == self.currency:
             raise ValueError(
                 f"Wrong currency ! Need {self.currency} get {new_transaction.currency}")

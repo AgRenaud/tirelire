@@ -14,6 +14,7 @@ fastapi = "^0.72.0"
 psycopg2-binary = "^2.9.3"
 envyaml = "^1.10.211231"
 uuid = "^1.30"
+uvicorn = "^0.17.0"
 
 [tool.poetry.dev-dependencies]
 coverage = {version = "^6.2", extras = ["toml"]}

@@ -18,27 +18,14 @@ class TestAccount(TestCase):
 
     def test_add_transaction_must_append_to_account(self):
         my_account = Account("uuid", Currency.EUR, [])
-        t1 = Transaction(
-            "my transaction",
-            date(2022,1,26),
-            -12345.90,
-            Currency.EUR,
-            Category.HOUSING
-        )
-        my_account.add_transaction(t1)
+        t1 = Transaction("my transaction", date(2022,1,26), -12345.90, Currency.EUR, Category.HOUSING)
+        my_account.add_transaction( "my transaction", date(2022,1,26), -12345.90, 'EUR', 'HOUSING')
         self.assertEqual(my_account.transactions, [t1])
 
     def test_add_transaction_must_raise_exception(self):
         my_account = Account("uuid", Currency.USD, [])
-        t1 = Transaction(
-            "my transaction",
-            date(2022,1,26),
-            -12345.90,
-            Currency.EUR,
-            Category.HOUSING
-        )
         with self.assertRaises(ValueError):
-            my_account.add_transaction(t1)
+            my_account.add_transaction( "my transaction", date(2022,1,26), -12345.90, 'EUR', 'HOUSING')
 
     def test_compute_balance_must_return_value(self):
         t1 = Transaction(
