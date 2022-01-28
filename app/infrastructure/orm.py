@@ -19,8 +19,8 @@ transactions = Table(
     Column("currency", Enum(Currency)),
     Column("category", Enum(Category)),
     Column("account_id", ForeignKey("accounts.id")), 
-    Column("updated_at", DateTime, default=datetime.datetime.now),
-    Column("created_at", DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now),
+    Column("updated_at", DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now),
+    Column("created_at", DateTime, default=datetime.datetime.now),
 )
 
 accounts = Table(
@@ -28,8 +28,8 @@ accounts = Table(
     mapper_registry.metadata,
      Column("id", Text, primary_key=True),
      Column("currency", Enum(Currency)),
-     Column("updated_at", DateTime, default=datetime.datetime.now),
-     Column("created_at", DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
+     Column("updated_at", DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now),
+     Column("created_at", DateTime, default=datetime.datetime.now),
 )
 
 def start_mappers():
