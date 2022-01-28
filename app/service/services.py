@@ -28,7 +28,6 @@ def compute_category_balance(account_id: str, category: str, uow: AccountUnitOfW
     return balance
 
 def add_transactions(account_id: str, transactions: List, uow: AccountUnitOfWork) -> float:
-    print(transactions)
     with uow:
         account: Account = uow.accounts.get(account_id)
         for transaction in transactions:
