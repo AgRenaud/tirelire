@@ -1,0 +1,10 @@
+
+logging:
+  config:
+    path: ./app/default_logging.ini
+postgres:
+  user: postgres
+  password: 
+  host: localhost
+  db_name: test
+  port: 54321

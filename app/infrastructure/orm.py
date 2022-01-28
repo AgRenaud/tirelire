@@ -1,17 +1,17 @@
 import datetime
 
-from sqlalchemy import ForeignKey, MetaData, Table, Column, Integer, DateTime, Enum, Text, Float,create_engine
-from sqlalchemy.orm import mapper, relationship
+from sqlalchemy import ForeignKey, Table, Column, Integer, DateTime, Enum, Text, Float, create_engine
+from sqlalchemy.orm import relationship, registry
 
 from app.domain import Transaction, Account
 
 from app.domain import Category, Currency
 
-metadata = MetaData()
+mapper_registry = registry()
 
 transactions = Table(
     'transactions',
-    metadata,
+    mapper_registry.metadata,
     Column("id", Integer, primary_key=True),
     Column("name", Text, nullable=False),
     Column("date", DateTime, nullable=False),
@@ -19,29 +19,30 @@ transactions = Table(
     Column("currency", Enum(Currency)),
     Column("category", Enum(Category)),
     Column("account_id", ForeignKey("accounts.id")), 
-    Column("updated_at", DateTime, default=datetime.datetime.now),
-    Column("created_at", DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now),
+    Column("updated_at", DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now),
+    Column("created_at", DateTime, default=datetime.datetime.now),
 )
 
 accounts = Table(
     'accounts',
-    metadata,
+    mapper_registry.metadata,
      Column("id", Text, primary_key=True),
      Column("currency", Enum(Currency)),
-     Column("updated_at", DateTime, default=datetime.datetime.now),
-     Column("created_at", DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
+     Column("updated_at", DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now),
+     Column("created_at", DateTime, default=datetime.datetime.now),
 )
 
 def start_mappers():
-    transaction_mapper = mapper(Transaction, transactions)
-    account_mapper = mapper(Account, accounts,
+    transaction_mapper = mapper_registry.map_imperatively(
+        Transaction, transactions)
+    account_mapper = mapper_registry.map_imperatively(
+        Account, accounts,
         properties={
             "transactions": relationship(transaction_mapper)
         },
     )
     
 
-def get_engine(uri):
+def set_up_db(uri: str) -> None:
     engine = create_engine(uri)
-    metadata.create_all(engine, checkfirst=True)
-    return engine
+    mapper_registry.metadata.create_all(engine)
