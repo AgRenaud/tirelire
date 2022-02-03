@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from app.service.unit_of_work import AccountUnitOfWork
-from app.infrastructure.repository import AccountRepository
-from app.service import services
+from app.service_layer.unit_of_work import AbstractAccountUnitOfWork
+from app.adapters.repository import AccountRepository
+from app.service_layer import services
 
 
 class FakeRepository(AccountRepository):
@@ -17,7 +17,7 @@ class FakeRepository(AccountRepository):
         return next((a for a in self.accounts if a.id == id), None)
 
 
-class FakeAccountUoW(AccountUnitOfWork):
+class FakeAccountUoW(AbstractAccountUnitOfWork):
     def __init__(self):
         self.accounts = FakeRepository([])
         self.committed = False
@@ -44,5 +44,5 @@ class TestServices(TestCase):
     def test_compute_category_balance(self):
         pass
 
-    def test_add_transactions(self):
+    def test_add_operations(self):
         pass

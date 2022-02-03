@@ -1,1 +1,1 @@
-# bank-transaction-categorization
+# bank-operation-categorization

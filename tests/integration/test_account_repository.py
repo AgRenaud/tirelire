@@ -5,13 +5,12 @@ from sqlalchemy.orm import sessionmaker, close_all_sessions
 from unittest import TestCase
 from datetime import date
 
-from app.domain import Account, Currency, Account, Transaction, Category
-from app.infrastructure.repository import AccountRepository, AccountRepositoryImplem
-from app.infrastructure.orm import start_mappers, mapper_registry
+from app.domain.model import Account, Currency, Account, Operation, Category
+from app.adapters.repository import AccountRepository, AccountRepositoryImplem
+from app.adapters.orm import start_mappers, mapper_registry
 
 
 class TestAccountRepository(TestCase):
-
 
         @classmethod
         def setUpClass(cls):
@@ -27,12 +26,12 @@ class TestAccountRepository(TestCase):
             cls.engine.dispose()
 
         def test_added_accounts_must_be_queryable(self):
-            transactions = [
-                Transaction("my transaction", date(2022,1,26), -12345.90, Currency.USD, Category.HOUSING),
-                Transaction("my transaction", date(2022,1,26), -14.99, Currency.USD, Category.HOBBIES_SPORT),
-                Transaction("my transaction", date(2021,12,28), 2349.77, Currency.USD, Category.SALARY)
+            operations = [
+                Operation("my operation", date(2022,1,26), -12345.90, Currency.USD, Category.HOUSING),
+                Operation("my operation", date(2022,1,26), -14.99, Currency.USD, Category.HOBBIES_SPORT),
+                Operation("my operation", date(2021,12,28), 2349.77, Currency.USD, Category.SALARY)
             ]
-            accountX = Account('XXX', Currency.USD, transactions)
+            accountX = Account('XXX', Currency.USD, operations)
             self.repo.add(accountX)
             self.assertEqual(self.repo.get('XXX'), accountX)
             self.assertEqual(self.repo.list(), [accountX])

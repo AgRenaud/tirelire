@@ -9,14 +9,29 @@ services:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: "5432"
       POSTGRES_DB: "test"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD:  "MyRedisPassword"
     ports:
       - "8000:8000"
-    command: ["uvicorn", "app.api:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"]
+    command: [
+      "uvicorn", "app.entrypoints.api:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"
+      ]
     volumes:
       - "./app:/app"
     depends_on:
       - postgres
+      - redis
   postgres:
     image: postgres:latest
     env_file: 
       - dev-database.conf
+  redis:
+    image: redis:alpine
+    environment:
+     REDIS_REPLICATION_MODE: "master"
+    ports:
+     - "6379:6379"
+    command: [
+      "redis-server", "--requirepass", "MyRedisPassword"
+      ]
