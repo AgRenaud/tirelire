@@ -53,7 +53,4 @@ class Operation(BaseModel):
 class AddOperations(BaseModel):
     operations: List[Operation]
 
-    @validator('operations')
-    def operation_to_dict(cls, operations):
-        return [dict(t) for t in operations]
 

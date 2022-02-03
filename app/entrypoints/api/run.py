@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 def create_app():
     
-    orm.start_mappers()
     orm.set_up_db(config.get_postgres_uri())
 
     app = FastAPI()

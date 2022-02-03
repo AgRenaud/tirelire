@@ -1,9 +1,7 @@
 import logging
 from typing import Callable, Dict, List, Union, Type, TYPE_CHECKING
 from app.domain import commands, events
-
-if TYPE_CHECKING:
-    from .. import unit_of_work
+from app.service_layer import unit_of_work
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +11,7 @@ Message = Union[commands.Command, events.Event]
 class MessageBus:
     def __init__(
         self,
-        uow: unit_of_work.AbstractUnitOfWork,
+        uow: unit_of_work.AbstractAccountHolderUnitOfWork,
         event_handlers: Dict[Type[events.Event], List[Callable]],
         command_handlers: Dict[Type[commands.Command], Callable],
     ):
@@ -21,8 +19,15 @@ class MessageBus:
         self.event_handlers = event_handlers
         self.command_handlers = command_handlers
 
-    def handle(self, messages: List[Message]):
+    def handle(self, message: Message):
+        self.queue = [message]
+        self._handle()
+
+    def handle_batch(self, messages: List[Message]):
         self.queue = messages
+        self._handle()
+
+    def _handle(self):
         while self.queue:
             message = self.queue.pop(0)
             if isinstance(message, events.Event):

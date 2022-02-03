@@ -1,9 +1,13 @@
 from fastapi import APIRouter
+from uuid import uuid4
 
+from app.domain import commands
 from app.entrypoints.api.schemas import input
-from app.service_layer.services import AccountHolderService
 from app.service_layer.unit_of_work import AccountHolderUnitOfWorkImplem
-from app import views
+from app import views, bootstrap
+
+
+bus = bootstrap.bootstrap()
 
 
 router = APIRouter(
@@ -11,10 +15,17 @@ router = APIRouter(
     tags=["account_holders"]
 )
 
+
+def create_id():
+    return str(uuid4())
+
+
 @router.post('/')
 def add_account_holder():
-    service = AccountHolderService(AccountHolderUnitOfWorkImplem())
-    return service.add_account_holder()
+    new_id = create_id()
+    cmd = commands.CreateAccountHolder(new_id)
+    bus.handle(cmd)
+    return {'account_holder_id': new_id}
 
 @router.get('/{account_holder_id}')
 def get_account_holder_by_id(account_holder_id: str):
@@ -24,8 +35,10 @@ def get_account_holder_by_id(account_holder_id: str):
 
 @router.post('/{account_holder_id}/accounts')
 def add_account_to_account_holder(account_holder_id: str, input: input.AddAccount):
-    service = AccountHolderService(AccountHolderUnitOfWorkImplem())
-    return service.add_account(account_holder_id, input.currency)
+    new_id = create_id()
+    cmd = commands.CreateAccount(account_holder_id, new_id, input.currency)
+    bus.handle(cmd)
+    return {'account_holder_id': account_holder_id, 'account_id': new_id, 'currency': input.currency}
 
 @router.get('/{account_holder_id}/accounts')
 def get_all_accounts_of_account_holder(account_holder_id: str):
@@ -45,8 +58,16 @@ def delete_an_account(account_holder_id: str, account_account_id: str):
 
 @router.post('/{account_holder_id}/accounts/{account_id}/operations')
 def add_operations_to_an_account(account_holder_id: str, account_id: str, input: input.AddOperations):
-    service = AccountHolderService(AccountHolderUnitOfWorkImplem())
-    return service.add_operations(account_holder_id, account_id, input.operations)
+    cmds = []
+    for operation in input.operations:
+        new_cmd = commands.AddOperation(
+            operation.name, operation.date, operation.value, operation.currency, operation.category
+        )
+        print(new_cmd)
+        cmds.append(new_cmd)
+    cmd = commands.AddOperations(account_holder_id, account_id, cmds)
+    bus.handle(cmd)
+    return {'account_holder_id': account_holder_id, 'account_id': account_id, 'operations_added': len(cmds)}
 
 @router.get('/{account_holder_id}/accounts/{account_id}/operations/{operation_id}')
 def get_operation_by_id(account_holder_id: str, account_id: str, operation_id: str):

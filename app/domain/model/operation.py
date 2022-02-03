@@ -12,3 +12,7 @@ class Operation:
     value: float
     currency: Currency
     category: Category = Category.UNKNOWN
+
+    def __post_init__(self):
+        if self.category is None:
+            self.category= Category.UNKNOWN

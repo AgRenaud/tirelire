@@ -20,7 +20,8 @@ class AbstractAccountHolderUnitOfWork(abc.ABC):
         self._commit()
 
     def collect_new_events(self):
-        raise NotImplementedError
+        return []
+
 
     @abc.abstractmethod
     def _commit(self):
