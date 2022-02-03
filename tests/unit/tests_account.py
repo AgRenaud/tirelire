@@ -19,13 +19,14 @@ class TestAccount(TestCase):
     def test_add_operation_must_append_to_account(self):
         my_account = Account("uuid", Currency.EUR, [])
         t1 = Operation("my operation", date(2022,1,26), -12345.90, Currency.EUR, Category.HOUSING)
-        my_account.add_operation( "my operation", date(2022,1,26), -12345.90, 'EUR', 'HOUSING')
+        my_account.add_operation(t1)
         self.assertEqual(my_account.operations, [t1])
 
     def test_add_operation_must_raise_exception(self):
         my_account = Account("uuid", Currency.USD, [])
         with self.assertRaises(ValueError):
-            my_account.add_operation( "my operation", date(2022,1,26), -12345.90, 'EUR', 'HOUSING')
+            new_op = Operation("my operation", date(2022,1,26), -12345.90, 'EUR', 'HOUSING')
+            my_account.add_operation(new_op)
 
     def test_compute_balance_must_return_value(self):
         t1 = Operation(

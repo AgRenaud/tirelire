@@ -14,7 +14,6 @@ class TestAccountRepository(TestCase):
 
         @classmethod
         def setUpClass(cls):
-            start_mappers()
             cls.engine = create_engine("sqlite://")
             mapper_registry.metadata.create_all(cls.engine)
             cls.Session = sessionmaker(cls.engine)
