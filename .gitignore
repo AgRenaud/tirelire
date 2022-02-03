@@ -2,3 +2,5 @@
 __pycache__/
 .coverage
 .audit
+.vscode/
+.ipynb_checkpoints/
