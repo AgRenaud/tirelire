@@ -1259,14 +1259,14 @@
       "isDeleted": false,
       "boundElements": null,
       "updated": 1642891337311,
-      "text": "Transaction",
+      "text": "Operation",
       "fontSize": 10.923674423448311,
       "fontFamily": 3,
       "textAlign": "center",
       "verticalAlign": "middle",
       "baseline": 9,
       "containerId": "BZ_bRDFD4GRairtrxtDW-",
-      "originalText": "Transaction"
+      "originalText": "Operation"
     },
     {
       "type": "rectangle",

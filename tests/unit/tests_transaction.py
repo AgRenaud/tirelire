@@ -2,10 +2,10 @@ from unittest import TestCase
 from parameterized import parameterized
 from datetime import date
 
-from app.domain import Transaction, Currency
+from app.domain.model import Operation, Currency
 
 
-class TestTransaction(TestCase):
+class TestOperation(TestCase):
     
     @parameterized.expand([
         (15035.30, Currency.EUR),
@@ -13,5 +13,5 @@ class TestTransaction(TestCase):
     ])
     def test_currency_property_must_return_value(self, value: float, curr: Currency):
 
-        t = Transaction("My transaction", date.today(), value, curr)
+        t = Operation("My operation", date.today(), value, curr)
         self.assertEqual(t.currency, curr)
