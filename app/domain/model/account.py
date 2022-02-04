@@ -23,11 +23,13 @@ class Account:
             raise ValueError(
                 f"Wrong currency ! Need {self.currency} get {new_operation.currency}")
         self.operations.append(new_operation)
-        self.events.append(events.OperationAdded(
-            new_operation.name, new_operation.date, 
-            new_operation.value, new_operation.currency, 
-            new_operation.category, new_operation.currency
-        ))
+        self.events.append(
+            events.OperationAdded(
+                new_operation.name, new_operation.date, 
+                new_operation.value, new_operation.currency, 
+                new_operation.category, self.id
+            )
+        )
 
     def compute_balance(self) -> float:
         balance = 0.0

@@ -18,6 +18,12 @@ def get_config():
         logger.error(exc)
         raise exc
 
+def set_up_loggers():
+    configuration = get_config()
+
+    log_file_path = configuration['logging']['config']['path']
+    logging.config.fileConfig(log_file_path, disable_existing_loggers=True)
+
 
 def get_postgres_uri():
     configuration = get_config()
@@ -30,11 +36,17 @@ def get_postgres_uri():
 
     return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
 
+
 def get_redis_config():
     configuration = get_config()
 
     return {
-        
+        "host": configuration['redis']['host'],
+        "port": configuration['redis']['port'], 
+        "password": configuration['redis']['password']
     }
 
-
+def check_config_file():
+    get_config()
+    get_postgres_uri()
+    get_redis_config()

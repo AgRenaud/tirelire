@@ -1,2 +1,2 @@
-from app.service_layer.unit_of_work.account_holder_uow import AbstractAccountHolderUnitOfWork, AccountHolderUnitOfWorkImplem
+from app.service_layer.unit_of_work.holder_uow import AbstractHolderUnitOfWork, HolderUnitOfWorkImplem
 from app.service_layer.unit_of_work.account_uow import AbstractAccountUnitOfWork, AccountUnitOfWorkImplem
