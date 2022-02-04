@@ -30,3 +30,11 @@ def get_postgres_uri():
 
     return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
 
+def get_redis_config():
+    configuration = get_config()
+
+    return {
+        
+    }
+
+

@@ -11,15 +11,17 @@ class AccountHolderCreated(Event):
 
 @dataclass
 class AccountCreated(Event):
-    account_holder_id: str
-    account_id: str
+    id: str
     currency: str
+
+    account_holder_id: str
 
 @dataclass
 class OperationAdded(Event):
-    account_id: str
     name: str
     date: date
     value: float
     currency: str
     category: str
+
+    account_id: str

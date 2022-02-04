@@ -9,6 +9,7 @@ from app.domain.model.operation import Operation
 class AccountHolder:
     id: str
     accounts: List[Account] = field(default_factory=list)
+    events = []
 
     def create_account(self, account: Account):
         self.accounts.append(account)
