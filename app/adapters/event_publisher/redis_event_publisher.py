@@ -13,6 +13,5 @@ r = redis.Redis(**config.get_redis_config())
 
 
 def publish(channel, event: events.Event):
-    logging.info("publishing: channel=%s, event=%s", channel, event)
-    res = r.publish(channel, json.dumps(asdict(event), sort_keys=True, default=str))
-    print(res)
+    logger.info("publishing: channel=%s, event=%s", channel, event)
+    res = r.xadd(channel, asdict(event))

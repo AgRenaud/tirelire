@@ -25,9 +25,9 @@ class Account:
         self.operations.append(new_operation)
         self.events.append(
             events.OperationAdded(
-                new_operation.name, new_operation.date, 
-                new_operation.value, new_operation.currency, 
-                new_operation.category, self.id
+                new_operation.name, new_operation.date.strftime('%Y-%m-%d'), 
+                new_operation.value, new_operation.currency.name, 
+                new_operation.category.name, self.id
             )
         )
 
