@@ -8,7 +8,3 @@ postgres:
   host: localhost
   db_name: test
   port: 54321
-redis:
-  host: localhost
-  port: 65432
-  password: MyRedisPassword
