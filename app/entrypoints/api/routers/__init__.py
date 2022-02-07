@@ -1,1 +1,1 @@
-from app.entrypoints.api.routers.account_holder import router as router_account_holder
+from app.entrypoints.api.routers.holder import router as router_holder

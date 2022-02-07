@@ -3,7 +3,7 @@ import datetime
 from sqlalchemy import ForeignKey, Table, Column, Integer, DateTime, Enum, Text, Float, create_engine
 from sqlalchemy.orm import relationship, registry
 
-from app.domain.model import Operation, Account, AccountHolder, Category, Currency
+from app.domain.model import Operation, Account, Holder, Category, Currency
 
 mapper_registry = registry()
 
@@ -26,13 +26,13 @@ accounts = Table(
     mapper_registry.metadata,
      Column("id", Text, primary_key=True),
      Column("currency", Enum(Currency)),
-     Column("account_holder_id", ForeignKey("account_holders.id")), 
+     Column("holder_id", ForeignKey("holders.id")), 
      Column("updated_at", DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now),
      Column("created_at", DateTime, default=datetime.datetime.now),
 )
 
-account_holders = Table(
-    'account_holders',
+holders = Table(
+    'holders',
     mapper_registry.metadata,
      Column("id", Text, primary_key=True),
      Column("updated_at", DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now),
@@ -48,8 +48,8 @@ def start_mappers():
             "operations": relationship(operation_mapper)
         },
     )
-    account_holder_mapper = mapper_registry.map_imperatively(
-        AccountHolder, account_holders,
+    holder_mapper = mapper_registry.map_imperatively(
+        Holder, holders,
         properties={
             "accounts": relationship(account_mapper)
         },

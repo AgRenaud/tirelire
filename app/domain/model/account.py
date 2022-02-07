@@ -5,6 +5,7 @@ from typing import List
 from app.domain.model.operation import Operation
 from app.domain.model.currency import Currency
 from app.domain.model.category import Category
+from app.domain.events import events
 
 
 @dataclass
@@ -22,6 +23,13 @@ class Account:
             raise ValueError(
                 f"Wrong currency ! Need {self.currency} get {new_operation.currency}")
         self.operations.append(new_operation)
+        self.events.append(
+            events.OperationAdded(
+                new_operation.name, new_operation.date.strftime('%Y-%m-%d'), 
+                new_operation.value, new_operation.currency.name, 
+                new_operation.category.name, self.id
+            )
+        )
 
     def compute_balance(self) -> float:
         balance = 0.0
