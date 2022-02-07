@@ -8,12 +8,12 @@ class Command:
 
 
 @dataclass
-class CreateAccountHolder(Command):
-    account_holder_id: str
+class CreateHolder(Command):
+    holder_id: str
 
 @dataclass
 class CreateAccount(Command):
-    account_holder_id: str
+    holder_id: str
     account_id: str
     currency: str
 
@@ -28,6 +28,6 @@ class AddOperation(Command):
 
 @dataclass
 class AddOperations(Command):
-    account_holder_id: str
+    holder_id: str
     account_id: str
     operations: List[AddOperation]
