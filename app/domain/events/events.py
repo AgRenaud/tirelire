@@ -6,20 +6,22 @@ class Event:
     pass
 
 @dataclass
-class AccountHolderCreated(Event):
+class HolderCreated(Event):
     id: str
 
 @dataclass
 class AccountCreated(Event):
-    account_holder_id: str
-    account_id: str
+    id: str
     currency: str
+
+    holder_id: str
 
 @dataclass
 class OperationAdded(Event):
-    account_id: str
     name: str
     date: date
     value: float
     currency: str
     category: str
+
+    account_id: str

@@ -1,2 +1,0 @@
-from app.adapters.repository.account_holder_repository.account_holder_repository import AccountHolderRepository
-from app.adapters.repository.account_holder_repository.account_holder_repository_implem import AccountHolderRepositoryImplem

@@ -7,30 +7,29 @@ from uuid import uuid4
 
 from typing import List
 
-from app.domain.model import AccountHolder, Account, Operation, Currency, Category
-from app.service_layer.unit_of_work import AbstractAccountHolderUnitOfWork
+from app.domain.model import Holder, Account, Operation, Currency, Category
+from app.service_layer.unit_of_work import AbstractHolderUnitOfWork
 
 
 
-def add_account_holder(cmd: commands.CreateAccountHolder, uow: AbstractAccountHolderUnitOfWork) -> None:
+def add_holder(cmd: commands.CreateHolder, uow: AbstractHolderUnitOfWork) -> None:
     with uow:
-        account_holder = AccountHolder(cmd.account_holder_id, [])
-        uow.account_holders.add(account_holder)
+        holder = Holder(cmd.holder_id, [])
+        uow.holders.add(holder)
         uow.commit()
 
 
-def add_account(cmd: commands.CreateAccount, uow: AbstractAccountHolderUnitOfWork) -> None:
+def add_account(cmd: commands.CreateAccount, uow: AbstractHolderUnitOfWork) -> None:
     with uow:
         account = Account(cmd.account_id, Currency[cmd.currency], [])
-        account_holder: AccountHolder = uow.account_holders.get(cmd.account_holder_id)
-        account_holder.create_account(account)
+        holder: Holder = uow.holders.get(cmd.holder_id)
+        holder.create_account(account)
         uow.commit()
 
 
-def add_operations(cmd: commands.AddOperations, uow: AbstractAccountHolderUnitOfWork) -> Account:
+def add_operations(cmd: commands.AddOperations, uow: AbstractHolderUnitOfWork) -> Account:
     with uow:
-        account_holder: AccountHolder = uow.account_holders.get(cmd.account_holder_id)
-        account = account_holder.get_account_by_id(cmd.account_id)
+        account: Account = uow.accounts.get(cmd.account_id)
         for operation in cmd.operations: 
             new_operation = Operation(
                 operation.name,
