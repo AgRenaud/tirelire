@@ -6,13 +6,9 @@ from app.domain.model.operation import Operation
 
 
 @dataclass
-class Holder:
+class AccountHolder:
     id: str
     accounts: List[Account] = field(default_factory=list)
-    events = []
-
-    def __hash__(self) -> int:
-        return hash(self.id)
 
     def create_account(self, account: Account):
         self.accounts.append(account)

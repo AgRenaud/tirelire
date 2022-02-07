@@ -1,19 +1,23 @@
 import inspect
 from typing import Callable
-from app.adapters import orm, event_publisher
+from app.adapters import orm
 from app.service_layer import handlers, messagebus, unit_of_work
 
 
 def bootstrap(
     start_orm: bool = True,
-    uow: unit_of_work.AbstractHolderUnitOfWork = unit_of_work.HolderUnitOfWorkImplem(),
-    publish: Callable = event_publisher.publish
+    uow: unit_of_work.AbstractAccountHolderUnitOfWork = unit_of_work.AccountHolderUnitOfWorkImplem(),
 ) -> messagebus.MessageBus:
+    """
+    TODO: 
+        - Add (publish: Callable = redis_eventpublisher.publish)
+        - dependencies ("publish": publish)
+    """
 
     if start_orm:
         orm.start_mappers()
 
-    dependencies = {"uow": uow, "publish": publish}
+    dependencies = {"uow": uow}
     injected_event_handlers = {
         event_type: [
             inject_dependencies(handler, dependencies)

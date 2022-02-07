@@ -23,7 +23,6 @@ unittest = "^0.0"
 "testing.postgresql" = "^1.3.0"
 parameterized = "^0.8.1"
 jupyter = "^1.0.0"
-"testing.redis" = "^1.1.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -1,17 +1,13 @@
 import abc
 
-from itertools import chain
-
 from app.service_layer.unit_of_work.session_factory import DEFAULT_SESSION_FACTORY
-from app.adapters.repository import HolderRepository, HolderRepositoryImplem
-from app.adapters.repository import AccountRepository, AccountRepositoryImplem
+from app.adapters.repository import AccountHolderRepository, AccountHolderRepositoryImplem
 
 
-class AbstractHolderUnitOfWork(abc.ABC):
-    holders: HolderRepository
-    accounts: AccountRepository
+class AbstractAccountHolderUnitOfWork(abc.ABC):
+    account_holders: AccountHolderRepository
 
-    def __enter__(self) -> "AbstractHolderUnitOfWork":
+    def __enter__(self) -> "AbstractAccountHolderUnitOfWork":
         return self
 
     def __exit__(self, exn_type, exn_value, traceback):
@@ -24,17 +20,8 @@ class AbstractHolderUnitOfWork(abc.ABC):
         self._commit()
 
     def collect_new_events(self):
-        return chain(self._collect_accounts_events(), self._collect_holders_events())
-    
-    def _collect_holders_events(self):
-        for holder in self.holders.seen:
-            while holder.events:
-                yield holder.events.pop(0)
+        return []
 
-    def _collect_accounts_events(self):
-        for account in self.accounts.seen:
-            while account.events:
-                yield account.events.pop(0)
 
     @abc.abstractmethod
     def _commit(self):
@@ -45,14 +32,13 @@ class AbstractHolderUnitOfWork(abc.ABC):
         raise NotImplementedError
 
 
-class HolderUnitOfWorkImplem(AbstractHolderUnitOfWork):
+class AccountHolderUnitOfWorkImplem(AbstractAccountHolderUnitOfWork):
     def __init__(self, session_factory=DEFAULT_SESSION_FACTORY):
         self.session_factory = session_factory
 
     def __enter__(self):
         self.session = self.session_factory()
-        self.holders = HolderRepositoryImplem(self.session)
-        self.accounts = AccountRepositoryImplem(self.session)
+        self.account_holders = AccountHolderRepositoryImplem(self.session)
         return super().__enter__()
 
     def __exit__(self, *args):
