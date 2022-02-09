@@ -13,7 +13,6 @@ class Account:
     id: str
     currency: Currency
     operations: List[Operation]
-    events = []
 
     def __hash__(self):
         return hash(self.id)
@@ -23,13 +22,6 @@ class Account:
             raise ValueError(
                 f"Wrong currency ! Need {self.currency} get {new_operation.currency}")
         self.operations.append(new_operation)
-        self.events.append(
-            events.OperationAdded(
-                new_operation.name, new_operation.date.strftime('%Y-%m-%d'), 
-                new_operation.value, new_operation.currency.name, 
-                new_operation.category.name, self.id
-            )
-        )
 
     def compute_balance(self) -> float:
         balance = 0.0

@@ -1,6 +1,4 @@
 from unittest import TestCase
-from parameterized import parameterized
-from datetime import date
 
 from app.domain.model import Holder, Account, Currency
 

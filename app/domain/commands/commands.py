@@ -23,7 +23,7 @@ class AddOperation(Command):
     date: date
     value: float
     currency: str
-    category: Optional[str]
+    category: Optional[str] = None
 
 
 @dataclass

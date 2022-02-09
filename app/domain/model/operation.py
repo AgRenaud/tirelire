@@ -11,8 +11,8 @@ class Operation:
     date: date
     value: float
     currency: Currency
-    category: Category = Category.UNKNOWN
+    category: Category = None
 
     def __post_init__(self):
         if self.category is None:
-            self.category= Category.UNKNOWN
+            self.category = Category.UNKNOWN
