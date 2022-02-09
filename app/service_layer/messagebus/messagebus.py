@@ -23,8 +23,6 @@ class MessageBus:
     def handle(self, message: Message):
         self.queue = [message]
         self._handle()
-        logger.debug(self.uow.accounts.seen)
-
 
     def _handle(self):
         while self.queue:

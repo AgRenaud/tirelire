@@ -1,12 +1,7 @@
-
-from app.domain import commands, events, model
-
 from typing import List, Callable
-
 from uuid import uuid4
 
-from typing import List
-
+from app.domain import commands
 from app.domain.model import Holder, Account, Operation, Currency, Category
 from app.service_layer.unit_of_work import AbstractHolderUnitOfWork
 
@@ -29,7 +24,10 @@ def add_account(cmd: commands.CreateAccount, uow: AbstractHolderUnitOfWork) -> N
 
 def add_operations(cmd: commands.AddOperations, uow: AbstractHolderUnitOfWork) -> Account:
     with uow:
-        account: Account = uow.accounts.get(cmd.account_id)
+        holder: Holder = uow.holders.get(cmd.holder_id)
+        account: Holder = holder.get_account_by_id(cmd.account_id)
+        if account is None:
+            raise ValueError
         for operation in cmd.operations: 
             new_operation = Operation(
                 operation.name,
@@ -38,5 +36,5 @@ def add_operations(cmd: commands.AddOperations, uow: AbstractHolderUnitOfWork) -
                 Currency[operation.currency],
                 Category[operation.category] if operation.category else None
                 )
-            account.add_operation(new_operation)
+            holder.add_operation_to_account(cmd.account_id, new_operation)
         uow.commit()
