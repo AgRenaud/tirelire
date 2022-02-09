@@ -2,14 +2,14 @@ import abc
 
 from itertools import chain
 
-from app.service_layer.unit_of_work.session_factory import DEFAULT_SESSION_FACTORY
+from app.service_layer.session_factory import DEFAULT_SESSION_FACTORY
 from app.adapters.repository import HolderRepository, HolderRepositoryImplem
 
 
-class AbstractHolderUnitOfWork(abc.ABC):
+class AbstractUnitOfWork(abc.ABC):
     holders: HolderRepository
 
-    def __enter__(self) -> "AbstractHolderUnitOfWork":
+    def __enter__(self) -> "AbstractUnitOfWork":
         return self
 
     def __exit__(self, exn_type, exn_value, traceback):
@@ -35,7 +35,7 @@ class AbstractHolderUnitOfWork(abc.ABC):
         raise NotImplementedError
 
 
-class HolderUnitOfWorkImplem(AbstractHolderUnitOfWork):
+class SQLAlchemyUnitOfWorkImplem(AbstractUnitOfWork):
     def __init__(self, session_factory=DEFAULT_SESSION_FACTORY):
         self.session_factory = session_factory
 

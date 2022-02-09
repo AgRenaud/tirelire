@@ -6,7 +6,7 @@ from app.service_layer import handlers, messagebus, unit_of_work
 
 def bootstrap(
     start_orm: bool = True,
-    uow: unit_of_work.AbstractHolderUnitOfWork = unit_of_work.HolderUnitOfWorkImplem(),
+    uow: unit_of_work.AbstractUnitOfWork = unit_of_work.SQLAlchemyUnitOfWorkImplem(),
     publish: Callable = event_publisher.publish
 ) -> messagebus.MessageBus:
 

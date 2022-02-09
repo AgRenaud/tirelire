@@ -6,7 +6,7 @@ from app import bootstrap
 from app.domain import commands
 from app.domain.model import Holder, Account, Currency
 from app.adapters.repository import  HolderRepository
-from app.service_layer.unit_of_work import AbstractHolderUnitOfWork
+from app.service_layer.unit_of_work import AbstractUnitOfWork
 
 
 class FakeHolderRepository:
@@ -25,7 +25,7 @@ class FakeHolderRepository:
         return self._holders
 
 
-class FakeUnitOfWork(AbstractHolderUnitOfWork):
+class FakeUnitOfWork(AbstractUnitOfWork):
     def __init__(self):
         self.holders: HolderRepository = FakeHolderRepository([])
         self.committed = False

@@ -12,7 +12,7 @@ Message = Union[commands.Command, events.Event]
 class MessageBus:
     def __init__(
         self,
-        uow: unit_of_work.AbstractHolderUnitOfWork,
+        uow: unit_of_work.AbstractUnitOfWork,
         event_handlers: Dict[Type[events.Event], List[Callable]],
         command_handlers: Dict[Type[commands.Command], Callable],
     ):

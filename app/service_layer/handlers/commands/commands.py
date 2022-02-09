@@ -3,18 +3,18 @@ from uuid import uuid4
 
 from app.domain import commands
 from app.domain.model import Holder, Account, Operation, Currency, Category
-from app.service_layer.unit_of_work import AbstractHolderUnitOfWork
+from app.service_layer.unit_of_work import AbstractUnitOfWork
 
 
 
-def add_holder(cmd: commands.CreateHolder, uow: AbstractHolderUnitOfWork) -> None:
+def add_holder(cmd: commands.CreateHolder, uow: AbstractUnitOfWork) -> None:
     with uow:
         holder = Holder(cmd.holder_id, [])
         uow.holders.add(holder)
         uow.commit()
 
 
-def add_account(cmd: commands.CreateAccount, uow: AbstractHolderUnitOfWork) -> None:
+def add_account(cmd: commands.CreateAccount, uow: AbstractUnitOfWork) -> None:
     with uow:
         account = Account(cmd.account_id, Currency[cmd.currency], [])
         holder: Holder = uow.holders.get(cmd.holder_id)
@@ -22,7 +22,7 @@ def add_account(cmd: commands.CreateAccount, uow: AbstractHolderUnitOfWork) -> N
         uow.commit()
 
 
-def add_operations(cmd: commands.AddOperations, uow: AbstractHolderUnitOfWork) -> Account:
+def add_operations(cmd: commands.AddOperations, uow: AbstractUnitOfWork) -> Account:
     with uow:
         holder: Holder = uow.holders.get(cmd.holder_id)
         account: Holder = holder.get_account_by_id(cmd.account_id)

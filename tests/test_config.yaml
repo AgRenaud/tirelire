@@ -5,10 +5,10 @@ logging:
 postgres:
   user: postgres
   password: 
-  host: localhost
+  host: 127.0.0.1
   db_name: test
   port: 54321
 redis:
-  host: localhost
+  host: 127.0.0.1
   port: 65432
   password: MyRedisPassword

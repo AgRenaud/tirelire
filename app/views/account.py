@@ -1,7 +1,7 @@
-from app.service_layer.unit_of_work import AbstractHolderUnitOfWork
+from app.service_layer.unit_of_work import AbstractUnitOfWork
 
 
-def get_account_by_id(account_id: str, uow: AbstractHolderUnitOfWork):
+def get_account_by_id(account_id: str, uow: AbstractUnitOfWork):
     with uow:
         results = uow.session.execute(
             """
@@ -11,7 +11,7 @@ def get_account_by_id(account_id: str, uow: AbstractHolderUnitOfWork):
         )
     return [dict(r) for r in results][0]
 
-def get_account_operations(account_id: str, uow: AbstractHolderUnitOfWork):
+def get_account_operations(account_id: str, uow: AbstractUnitOfWork):
     with uow:
         results = uow.session.execute(
             """
@@ -21,7 +21,7 @@ def get_account_operations(account_id: str, uow: AbstractHolderUnitOfWork):
         )
     return [dict(r) for r in results]
 
-def get_account_category_operations(account_id: str, category: str, uow: AbstractHolderUnitOfWork):
+def get_account_category_operations(account_id: str, category: str, uow: AbstractUnitOfWork):
     with uow:
         results = uow.session.execute(
             """

@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker, close_all_sessions
 from unittest import TestCase
 
 from app.domain.model import Holder, Currency, Account, Operation, Category
-from app.service_layer.unit_of_work import HolderUnitOfWorkImplem
+from app.service_layer.unit_of_work import SQLAlchemyUnitOfWorkImplem
 from app.adapters.orm import start_mappers, mapper_registry
 
 
@@ -38,7 +38,7 @@ class TestAccountUoW(TestCase):
         cls.engine.dispose()
 
     def test_add_holder_and_retrieve_it(self):
-        uow = HolderUnitOfWorkImplem(self.Session)
+        uow = SQLAlchemyUnitOfWorkImplem(self.Session)
 
         with uow:
             holder = Holder('f6325ab0-d5dd-4c51-a356-75b660ca36fc', [])
@@ -48,7 +48,7 @@ class TestAccountUoW(TestCase):
         self.assertEqual('f6325ab0-d5dd-4c51-a356-75b660ca36fc', get_holder(self.Session(), 'f6325ab0-d5dd-4c51-a356-75b660ca36fc')[0])
 
     def test_add_accounts_to_holder_and_retrieve_them(self):
-        uow = HolderUnitOfWorkImplem(self.Session)
+        uow = SQLAlchemyUnitOfWorkImplem(self.Session)
 
         with uow:
             holder: Holder = Holder('f1366cf5-558b-4508-b4df-2d57dd6ad336', [])

@@ -16,6 +16,6 @@ def create_app():
     app = FastAPI()
 
     logger.info('Add router')
-    app.include_router(router_holder)
+    app.include_router(router_holder, prefix='/v1')
 
     return app
