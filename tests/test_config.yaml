@@ -1,7 +1,7 @@
 
 logging:
   config:
-    path: ./app/default_logging.ini
+    path: ./tests/test_logging.ini
 postgres:
   user: postgres
   password: 
