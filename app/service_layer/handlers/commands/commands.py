@@ -6,7 +6,6 @@ from app.domain.model import Holder, Account, Operation, Currency, Category
 from app.service_layer.unit_of_work import AbstractUnitOfWork
 
 
-
 def add_holder(cmd: commands.CreateHolder, uow: AbstractUnitOfWork) -> None:
     with uow:
         holder = Holder(cmd.holder_id, [])
@@ -28,13 +27,13 @@ def add_operations(cmd: commands.AddOperations, uow: AbstractUnitOfWork) -> Acco
         account: Holder = holder.get_account_by_id(cmd.account_id)
         if account is None:
             raise ValueError
-        for operation in cmd.operations: 
+        for operation in cmd.operations:
             new_operation = Operation(
                 operation.name,
                 operation.date,
                 operation.value,
                 Currency[operation.currency],
-                Category[operation.category] if operation.category else None
-                )
+                Category[operation.category] if operation.category else None,
+            )
             holder.add_operation_to_account(cmd.account_id, new_operation)
         uow.commit()

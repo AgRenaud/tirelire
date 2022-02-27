@@ -5,8 +5,8 @@ from datetime import date
 
 
 class Currency(str, Enum):
-    EUR = 'EUR'
-    USD = 'USD'
+    EUR = "EUR"
+    USD = "USD"
 
 
 class Category(str, Enum):
@@ -30,7 +30,7 @@ class Category(str, Enum):
 class AddAccount(BaseModel):
     currency: Currency
 
-    @validator('currency')
+    @validator("currency")
     def currency_to_string(cls, v):
         return Currency[v].value
 
@@ -42,15 +42,14 @@ class Operation(BaseModel):
     currency: Currency
     category: Optional[Category]
 
-    @validator('currency')
+    @validator("currency")
     def currency_to_string(cls, v):
         return Currency[v].value
 
-    @validator('category')
+    @validator("category")
     def category_to_string(cls, v):
         return Category[v].value
 
+
 class AddOperations(BaseModel):
     operations: List[Operation]
-
-

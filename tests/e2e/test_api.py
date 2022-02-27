@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 from testing.postgresql import Postgresql
 from testing.redis import RedisServer
 
-from app.entrypoints.api.run import create_app
+from app.entrypoints.api.client import create_app
 
 
 class TestAPI(TestCase):

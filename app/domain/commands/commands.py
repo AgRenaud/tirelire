@@ -11,11 +11,13 @@ class Command:
 class CreateHolder(Command):
     holder_id: str
 
+
 @dataclass
 class CreateAccount(Command):
     holder_id: str
     account_id: str
     currency: str
+
 
 @dataclass
 class AddOperation(Command):

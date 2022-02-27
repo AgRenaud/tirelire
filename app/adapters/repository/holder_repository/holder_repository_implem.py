@@ -14,7 +14,7 @@ class HolderRepositoryImplem:
 
     def get(self, id: str) -> Holder:
         holder = self.session.query(Holder).filter_by(id=id).one()
-        if holder: 
+        if holder:
             self.seen.add(holder)
         return holder
 

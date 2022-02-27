@@ -11,6 +11,7 @@ def get_account_by_id(account_id: str, uow: AbstractUnitOfWork):
         )
     return [dict(r) for r in results][0]
 
+
 def get_account_operations(account_id: str, uow: AbstractUnitOfWork):
     with uow:
         results = uow.session.execute(
@@ -21,7 +22,10 @@ def get_account_operations(account_id: str, uow: AbstractUnitOfWork):
         )
     return [dict(r) for r in results]
 
-def get_account_category_operations(account_id: str, category: str, uow: AbstractUnitOfWork):
+
+def get_account_category_operations(
+    account_id: str, category: str, uow: AbstractUnitOfWork
+):
     with uow:
         results = uow.session.execute(
             """

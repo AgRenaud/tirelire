@@ -26,8 +26,11 @@ class Holder:
         account.add_operation(operation)
         self.events.append(
             events.OperationAdded(
-                operation.name, operation.date.strftime('%Y-%m-%d'), 
-                operation.value, operation.currency.name, 
-                operation.category.name, self.id
+                operation.name,
+                operation.date.strftime("%Y-%m-%d"),
+                operation.value,
+                operation.currency.name,
+                operation.category.name,
+                self.id,
             )
         )

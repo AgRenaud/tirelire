@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "my-piggy-bank"
-version = "0.1.0"
+name = "tirelire-app"
+version = "0.0.1"
 description = ""
 authors = ["AgRenaud <renaud.aguirrechambilla@gmail.com>"]
 packages = [
@@ -33,7 +33,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 test = 'scripts:test'
 report = 'scripts:report'
-audit = 'scripts:audit'
+format = 'scripts:format'
 
 [tool.coverage.run]
 source=['app']

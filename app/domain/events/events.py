@@ -5,9 +5,11 @@ from datetime import date
 class Event:
     pass
 
+
 @dataclass
 class HolderCreated(Event):
     id: str
+
 
 @dataclass
 class AccountCreated(Event):
@@ -15,6 +17,7 @@ class AccountCreated(Event):
     currency: str
 
     holder_id: str
+
 
 @dataclass
 class OperationAdded(Event):

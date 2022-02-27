@@ -7,7 +7,7 @@ from app.service_layer import handlers, messagebus, unit_of_work
 def bootstrap(
     start_orm: bool = True,
     uow: unit_of_work.AbstractUnitOfWork = unit_of_work.SQLAlchemyUnitOfWorkImplem(),
-    publish: Callable = event_publisher.publish
+    publish: Callable = event_publisher.publish,
 ) -> messagebus.MessageBus:
 
     if start_orm:
@@ -16,8 +16,7 @@ def bootstrap(
     dependencies = {"uow": uow, "publish": publish}
     injected_event_handlers = {
         event_type: [
-            inject_dependencies(handler, dependencies)
-            for handler in event_handlers
+            inject_dependencies(handler, dependencies) for handler in event_handlers
         ]
         for event_type, event_handlers in handlers.EVENT_HANDLERS.items()
     }
@@ -34,10 +33,8 @@ def bootstrap(
 
 
 def inject_dependencies(handler, dependencies):
-    params = inspect.signature(handler).parameters # Inspect handler arguments
+    params = inspect.signature(handler).parameters  # Inspect handler arguments
     deps = {
-        name: dependency
-        for name, dependency in dependencies.items()
-        if name in params
-    } # Match handler arguments by name
-    return lambda message: handler(message, **deps) # Inject argument as kwargs
+        name: dependency for name, dependency in dependencies.items() if name in params
+    }  # Match handler arguments by name
+    return lambda message: handler(message, **deps)  # Inject argument as kwargs
