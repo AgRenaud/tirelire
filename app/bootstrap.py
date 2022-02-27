@@ -34,10 +34,10 @@ def bootstrap(
 
 
 def inject_dependencies(handler, dependencies):
-    params = inspect.signature(handler).parameters
+    params = inspect.signature(handler).parameters # Inspect handler arguments
     deps = {
         name: dependency
         for name, dependency in dependencies.items()
         if name in params
-    }
-    return lambda message: handler(message, **deps)
+    } # Match handler arguments by name
+    return lambda message: handler(message, **deps) # Inject argument as kwargs
