@@ -25,6 +25,7 @@ unittest = "^0.0"
 parameterized = "^0.8.1"
 jupyter = "^1.0.0"
 "testing.redis" = "^1.1.1"
+black = "^22.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
