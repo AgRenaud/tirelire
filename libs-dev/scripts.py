@@ -1,6 +1,7 @@
 import os
 import subprocess
 
+os.environ["CONFIG_PATH"] = "./tests/test_config.yaml"
 
 def test():
     subprocess.run(

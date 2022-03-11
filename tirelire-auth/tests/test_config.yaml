@@ -1,4 +1,10 @@
-
+app:
+  secret_key: "my-secret"
+certs:
+  private_key: 
+    path: ./tests/private-test-key.pem
+  public_key: 
+    path: ./tests/public-test-key.pem
 logging:
   config:
     path: ./tests/test_logging.ini
