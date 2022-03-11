@@ -17,6 +17,11 @@ You can share `public-key.pem` to all your services. `private-key.pem` should re
 
 ### Run all the services with docker 🐳
 
+Once the previous steps are done, you'll be able to run all the services with docker
+```
+docker-compose up
+```
+
 ### Services
 | services         | purpose                        | developed in  |
 |------------------|--------------------------------|---------------|
