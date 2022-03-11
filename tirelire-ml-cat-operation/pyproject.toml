@@ -4,7 +4,7 @@ version = "0.0.1"
 description = ""
 authors = ["AgRenaud <renaud.aguirrechambilla@gmail.com>"]
 packages = [
-  { include = "./scripts.py" }
+  { include = "scripts.py", path = "../libs-dev"}
 ]
 
 [tool.poetry.dependencies]
@@ -32,7 +32,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 test = 'scripts:test'
 report = 'scripts:report'
-audit = 'scripts:audit'
+format = 'scripts:format'
 
 [tool.coverage.run]
 source=['app']

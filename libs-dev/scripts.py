@@ -1,7 +1,6 @@
 import os
 import subprocess
 
-os.environ["CONFIG_PATH"] = "./tests/test_config.yaml"
 
 def test():
     subprocess.run(
@@ -13,7 +12,7 @@ def report():
         ["python", "-m", "coverage", "report", "-m"]
     )
 
-def audit():
+def format():
     subprocess.run(
-        ["pylama", "--ignore", "E24,W504", "--skip", "*__init__.py", "--report", ".audit", "app"]
+        ["black", "app"]
     )
