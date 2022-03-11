@@ -1,9 +1,21 @@
-# Tirelire
+# Tirelire 💰
 
 Tirelire is an app that enable users to follow their bank account activity and to classify their bank operations easily with machine learning models.
 
-## Getting Started
+The app was first designed to help me to follow my account activity but it slowly ends up as a full featured app. I learned a lot about product design, software development, security and severals tools such as Redis.
 
+## Getting Started 🚀
+
+### Generate the private/public key 🔐
+In order to sign the token for authorization and authentification, you need to generate a private and a public key.
+The following command will help you to get those keys :
+```sh
+openssl ecparam -name prime256v1 -genkey -noout -out private-key.pem 
+openssl ec -in private-key.pem -pubout -out public-key.pem 
+```
+You can share `public-key.pem` to all your services. `private-key.pem` should remains to `tirelire-auth` only.
+
+### Run all the services with docker 🐳
 
 ### Services
 | services         | purpose                        | developed in  |
