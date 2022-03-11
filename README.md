@@ -31,6 +31,39 @@ docker-compose up
 | web-backend      | Back-end for web UI            | python 3.9.10 |
 | web-frontend     | Front-end for web UI           | Vue3 + Vite   |
 
+```mermaid
+flowchart LR
+    subgraph Web app
+        direction RL
+        id_4[web-backend]
+        id_5[web-frontend]
+    end
+    subgraph Persistence
+        db[(Database)]
+    end
+    subgraph Tirelire Services
+        direction TB
+        id_1[auth]
+        id_2[account]
+        id_3[ml-cat-operation]
+    end
+    subgraph Message Broker
+        id_6[Redis]
+    end
+    
+    id_2 --- id_3
+    id_4 --- id_1
+    id_4 --- id_2
+    id_5 --- id_4
+    
+    id_1 -.- db
+    id_2 -.- db
+
+    id_1 -.- id_6
+    id_2 -.- id_6
+    id_3 -.- id_6
+```
+
 ## Resources
 Here is a list of the usefull resources that help me to design and develop this app.
 
