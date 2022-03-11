@@ -11,19 +11,18 @@ logger = logging.getLogger(__name__)
 
 
 redis_pool = redis.ConnectionPool(**config.get_redis_config(), decode_responses=True)
-r = redis.Redis(connection_pool=redis_pool, decode_responses=True, charset='utf-8')
+r = redis.Redis(connection_pool=redis_pool, decode_responses=True, charset="utf-8")
 redis_conn = RedisConnector(r)
 
 GROUP_NAME = "auth_service"
-STREAMS = {
-    "add_application": ">"
-}
+STREAMS = {"add_application": ">"}
+
 
 def main():
     logger.info("Start redis listener")
     bus = bootstrap.bootstrap()
-    r.xgroup_create('add_user', GROUP_NAME, "$", True)
-    r.xgroup_create('add_application', GROUP_NAME, "$", True)
+    r.xgroup_create("add_user", GROUP_NAME, "$", True)
+    r.xgroup_create("add_application", GROUP_NAME, "$", True)
 
     while True:
         events_batch = redis_conn.get_events_batche(GROUP_NAME, STREAMS)
@@ -33,7 +32,6 @@ def main():
 
         for event in events_batch:
             handle_events(event, bus)
-        
 
 
 def handle_events(event, bus):

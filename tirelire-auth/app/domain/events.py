@@ -7,9 +7,11 @@ from app.domain.model import App
 class Event:
     pass
 
+
 @dataclass
 class UserAdded:
     user_id: str
+
 
 @dataclass
 class UserSubscribedToApp(Event):

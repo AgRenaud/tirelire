@@ -3,8 +3,8 @@ from enum import Enum
 
 
 class App(Enum):
-    TIRELIRE_WEB = 'tirelire_web'
-    TIRELIRE_APP = 'tirelire_app'
+    TIRELIRE_WEB = "tirelire_web"
+    TIRELIRE_APP = "tirelire_app"
 
 
 @dataclass

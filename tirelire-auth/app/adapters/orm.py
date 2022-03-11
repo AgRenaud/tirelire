@@ -52,9 +52,7 @@ users = Table(
 
 
 def start_mappers():
-    operation_mapper = mapper_registry.map_imperatively(
-        App, applications
-    )
+    operation_mapper = mapper_registry.map_imperatively(App, applications)
     account_mapper = mapper_registry.map_imperatively(
         User,
         users,

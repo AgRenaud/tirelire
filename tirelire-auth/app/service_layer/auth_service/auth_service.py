@@ -43,11 +43,8 @@ class AuthServiceImpl:
         if not self.verify_password(password, user):
             raise ValueError("Wrong password")
 
-        payload = dict(
-            client_id=user.id,
-            aud=" ".join(list(user._applications_auth))
-        )
-        
+        payload = dict(client_id=user.id, aud=" ".join(list(user._applications_auth)))
+
         return dict(
             token_type="bearer",
             access_token=self.token_encryption.encrypt_token(payload),
