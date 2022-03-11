@@ -1,4 +1,4 @@
-version: "3"
+version: "3.1"
 
 x-tirelire-common:
   environment:
@@ -10,7 +10,6 @@ x-tirelire-common:
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       REDIS_PASSWORD: "MyRedisPassword"
-
 
 services:
   account-service-api:
@@ -25,6 +24,8 @@ services:
     command: [
       "uvicorn", "app.entrypoints.api.client:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"
       ]
+    volumes:
+      - "./tirelire-account/app:/app"
     depends_on:
       - postgres
       - redis
@@ -40,6 +41,8 @@ services:
     command: [
       "uvicorn", "app.entrypoints.api.client:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"
       ]
+    volumes:
+      - "./tirelire-auth/app:/app"
     depends_on:
       - postgres
       - redis
@@ -53,6 +56,8 @@ services:
     command: [
       "python", "-m", "app.entrypoints.event_listener.redis_event_listener"
       ]
+    volumes:
+      - "./tirelire-auth/app:/app"
     depends_on:
       - postgres
       - redis
