@@ -1,0 +1,13 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "commonjs": true
+    },
+    "extends": [
+        "plugin:vue/recommended"
+    ],
+    "rules": {
+        "vue/multi-word-component-names": 0
+    }
+}

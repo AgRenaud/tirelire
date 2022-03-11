@@ -1,31 +1,91 @@
 version: "3"
 
 services:
-  api:
-    build: .
+  account-service-api:
+    container_name: "tirelire-account-api"
+    build: 
+      context: ./tirelire-account
     environment: 
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: psswd1234
       POSTGRES_HOST: postgres
       POSTGRES_PORT: "5432"
-      POSTGRES_DB: "test"
+      POSTGRES_DB: "tirelire_account"
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       REDIS_PASSWORD: "MyRedisPassword"
     ports:
-      - "8000:8000"
+      - "8001:8000"
     command: [
-      "uvicorn", "app.entrypoints.api:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"
+      "uvicorn", "app.entrypoints.api.client:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"
       ]
-    volumes:
-      - "./app:/app"
     depends_on:
       - postgres
       - redis
+  auth-service-api:
+    container_name: "tirelire-auth-api"
+    build:
+      context: ./tirelire-auth
+    environment: 
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "psswd1234"
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "tirelire_auth"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: "MyRedisPassword"
+    ports:
+      - "8002:8000"
+    command: [
+      "uvicorn", "app.entrypoints.api.client:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"
+      ]
+    depends_on:
+      - postgres
+      - redis
+  auth-service-event-listener:
+    container_name: "tirelire-auth-event-consumer"
+    build:
+      context: ./tirelire-auth
+    environment: 
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "psswd1234"
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "tirelire_auth"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: "MyRedisPassword"
+    command: [
+      "python", "-m", "app.entrypoints.event_listener.redis_event_listener"
+      ]
+    depends_on:
+      - postgres
+      - redis
+  nginx:
+    image: nginx:latest
+    restart: always
+    environment:
+      NGINX_HOST: localhost
+      NGINX_PORT_HTTP: 80
+      NGINX_PROXY_TIMEOUT: 180
+      FRONTEND_URL: 'tirelire-web-frontend'
+      FRONTEND_PORT: 80
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/templates/default.conf.template
+    depends_on:
+      - tirelire-web-frontend
+  tirelire-web-frontend:
+    build: 
+      context: ./tirelire-web-frontend
   postgres:
-    image: postgres:latest
+    image: postgres:9.6
     env_file: 
       - dev-database.conf
+    volumes:
+        - ./docker/docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
   redis:
     image: redis:alpine
     environment:
