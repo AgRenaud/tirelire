@@ -19,7 +19,10 @@ class FakeRepository:
         self._users.add(user)
 
     def get(self, id: str):
-        return next((h for h in self._users if h.id == id), None)
+        return next((u for u in self._users if u.id == id), None)
+
+    def get_by_email(self, email: str):
+        return next((u for u in self._users if u.email == email), None)
 
     def list(self):
         return self._users
@@ -33,10 +36,10 @@ class FakeAuthService:
         return hash(password)
 
     def generate_token(self, password: str, user: model.User) -> dict:
-        return NotImplemented
+        return password
 
     def verify_token(self, token: str) -> bool:
-        return NotImplemented
+        return token
 
 
 class FakeUnitOfWork(UnitOfWork):
@@ -69,14 +72,45 @@ class TestHandlers(TestCase):
             "doe", 
             "john.doe@mail.com"
         )
-        handlers.create_user(command, uow)
+        handlers.create_user(command, uow, lambda *args: None)
         self.assertIsNotNone(uow.users.get('id1234'))
 
-    def add_app_auth_to_user_must_return(self):
-        pass
+    def test_add_app_auth_to_user_must_return(self):
+        uow = bootstrap_test_app()
+        command = commands.CreateUser(
+            "id1234", 
+            "jdoe", 
+            "secure_password", 
+            "john", 
+            "doe", 
+            "john.doe@mail.com"
+        )
+        handlers.create_user(command, uow, lambda *args: None)
+        app_auth_1 = model.AppAuthorization(model.App.TIRELIRE_APP)
+        command = commands.AddAuthorizationToUser("id1234", app_auth_1)
+        handlers.add_app_auth_to_user(command, uow)
+        app_auth_2 = model.AppAuthorization(model.App.TIRELIRE_WEB)
+        command = commands.AddAuthorizationToUser("id1234", app_auth_2)
+        handlers.add_app_auth_to_user(command, uow)
 
-    def get_token_must_return(self):
-        pass
+        user = uow.users.get('id1234')
+
+        self.assertSetEqual(user._applications_auth, {app_auth_1, app_auth_2})
+
+    def test_get_token_must_return_token(self):
+        uow = bootstrap_test_app()
+        command = commands.CreateUser(
+            "id1234", 
+            "jdoe", 
+            "secure_password", 
+            "john", 
+            "doe", 
+            "john.doe@mail.com"
+        )
+        handlers.create_user(command, uow, lambda *args: None)
+        cmd = commands.Authenticate("john.doe@mail.com", "secure_password")
+        token = handlers.get_token(cmd, uow)
+        # TODO: Fake token generation
 
     def verify_token_must_return(self):
         pass

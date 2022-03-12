@@ -21,7 +21,7 @@ applications = Table(
     "authorizations",
     mapper_registry.metadata,
     Column("id", Integer, primary_key=True),
-    Column("application", Enum(App)),
+    Column("name", Enum(App)),
     Column("user_id", ForeignKey("users.id")),
     Column(
         "updated_at",
@@ -52,7 +52,7 @@ users = Table(
 
 
 def start_mappers():
-    operation_mapper = mapper_registry.map_imperatively(App, applications)
+    operation_mapper = mapper_registry.map_imperatively(AppAuthorization, applications)
     account_mapper = mapper_registry.map_imperatively(
         User,
         users,

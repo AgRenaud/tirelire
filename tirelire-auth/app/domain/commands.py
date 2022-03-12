@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from app.domain.model import App
+from app.domain.model import AppAuthorization
 
 
 @dataclass
@@ -21,7 +21,7 @@ class CreateUser(Command):
 @dataclass
 class AddAuthorizationToUser(Command):
     user_id: str
-    app: App
+    auth: AppAuthorization
 
 
 @dataclass
