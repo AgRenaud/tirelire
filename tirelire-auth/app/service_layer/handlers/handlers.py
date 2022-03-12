@@ -14,7 +14,7 @@ def create_user(command: commands.CreateUser, uow: UnitOfWork) -> None:
             command.email,
         )
         uow.users.add(new_user)
-        publish("add_user", events.UserAdded(new_user.id))
+        #publish("add_user", events.UserAdded(new_user.id))
 
 
 def add_app_auth_to_user(
