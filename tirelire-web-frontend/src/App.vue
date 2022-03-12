@@ -11,14 +11,14 @@
 </script>
 
 <template>
-  <div>
-    <div v-if="loggedIn === true">
+  <div class='main'>
+    <div class='main' v-if="loggedIn === true">
       <SideBar />
       <div :style="{ 'margin-left': sidebarWidth, 'padding-left': '10px' }">
         <router-view />
       </div>
     </div>
-    <div v-else>
+    <div class='main' v-else>
       <Login />
     </div>
   </div>
@@ -45,5 +45,8 @@
 }
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+.main {
+  height: 100%
 }
 </style>
