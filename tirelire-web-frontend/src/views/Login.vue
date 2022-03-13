@@ -20,13 +20,23 @@
       </Carousel>
     </div>
     <div class="form-container">
-      <FormSignIn />
+      <div v-if="isSignIn" >
+        <FormSignIn />
+        <p>You don't have an account ? <a @click="isSignIn = !isSignIn">Click here</a> </p>
+      </div>
+      <div v-else>
+        <FormSignUp />
+        <p>You already have an account ? Click here to <a @click="isSignIn = !isSignIn">sign in</a> </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+  import { ref } from "vue";
+
   import FormSignIn from '@/components/forms/FormSignIn'
+  import FormSignUp from '@/components/forms/FormSignUp'
   import Carousel from '@/components/carousel/Carousel'
   import Slide from '@/components/carousel/Slide'
 
@@ -39,6 +49,9 @@
     { "img": carouselImage2, "msg": "Ajoutez vos relevé de compte à tirelire à l'aide de notre interface ..." },
     { "img": carouselImage3, "msg": "... et analyser vos dépenses en détails !" } 
   ]
+
+  const isSignIn = ref(true)
+
 </script>
 
 <style scoped>
@@ -49,6 +62,7 @@
   }
   .carousel-container, .form-container{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 50%;
@@ -60,6 +74,13 @@
     background-color: #42b983;
     border: 1px solid rgb(0, 134, 78);
     box-shadow: 6px 0 5px -2px rgb(136, 136, 136, .5);
+  }
+  a {
+    color: rgb(29, 152, 101);
+  }
+  a:hover {
+    text-decoration: underline;
+    cursor: pointer;
   }
   /*
   .form-container {
