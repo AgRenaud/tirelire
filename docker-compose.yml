@@ -61,14 +61,16 @@ services:
     depends_on:
       - postgres
       - redis
-  ## tirelire-web-backend:
-  ##   container_name: "tirelire-backend"
-  ##   build:
-  ##     context: ./tirelire-web-backend
+  tirelire-web-backend:
+    container_name: "tirelire-backend"
+    build:
+      context: ./tirelire-web-backend
   tirelire-web-frontend:
     container_name: "tirelire-frontend"
     build: 
       context: ./tirelire-web-frontend
+    environment:
+      BACKEND_URL: http://tirelire-web-backend:8000
   nginx:
     image: nginx:latest
     restart: always
