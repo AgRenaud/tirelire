@@ -61,6 +61,14 @@ services:
     depends_on:
       - postgres
       - redis
+  ## tirelire-web-backend:
+  ##   container_name: "tirelire-backend"
+  ##   build:
+  ##     context: ./tirelire-web-backend
+  tirelire-web-frontend:
+    container_name: "tirelire-frontend"
+    build: 
+      context: ./tirelire-web-frontend
   nginx:
     image: nginx:latest
     restart: always
@@ -76,9 +84,6 @@ services:
       - ./nginx.conf:/etc/nginx/templates/default.conf.template
     depends_on:
       - tirelire-web-frontend
-  tirelire-web-frontend:
-    build: 
-      context: ./tirelire-web-frontend
   postgres:
     image: postgres:9.6
     env_file: 

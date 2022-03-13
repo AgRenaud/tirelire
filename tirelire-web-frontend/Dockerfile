@@ -1,4 +1,4 @@
-FROM node:alpine as develop-stage
+FROM node:14.17.4-alpine3.14 as develop-stage
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
