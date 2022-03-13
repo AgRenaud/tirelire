@@ -4,11 +4,11 @@ version = "0.0.1"
 description = "Backend for tirelire web application"
 authors = ["AgRenaud <renaud.aguirrechambilla@gmail.com>"]
 packages = [
-  { include = "scripts.py", path = "../libs-dev"}
+  { include = "scripts.py", from = "../libs-dev"}
 ]
 
 [tool.poetry.dependencies]
-python = "3.8.10"
+python = "3.9.10"
 fastapi = "^0.72.0"
 envyaml = "^1.10.211231"
 uvicorn = "^0.17.0"

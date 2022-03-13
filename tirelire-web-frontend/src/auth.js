@@ -35,9 +35,9 @@ export default {
     onChange () {}
   }
   
-  function pretendRequest (username, pass, cb) {
+  function pretendRequest (email, pass, cb) {
     setTimeout(() => {
-      if (username === 'raguirre' && pass === 'password') {
+      if (email === 'renaud.aguirrechambilla@gmail.com' && pass === 'password') {
         cb({
           authenticated: true,
           token: Math.random().toString(36).substring(7)

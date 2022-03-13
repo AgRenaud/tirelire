@@ -8,20 +8,50 @@
   const route = useRoute()
 
   const formInput = reactive({
-    username: "",
+    firstName: "",
+    lastName: "",
+    email: "",
     password: ""
   })
 
-  function login () {
-    auth.login(formInput.username, formInput.password, loggedIn => {
-      if (!loggedIn) {
-        this.error = true
-      } else {
-        router.replace(route.query.redirect || '/')
-        router.go()
-      }
-    })
-  }
+  function signUp () {
+      console.log(formInput)
+      return fetch(
+          'http://jsonplaceholder.typicode.com/posts', {
+          method: 'post',
+          headers: {
+              'content-type': 'application/json'
+          }
+        })
+        .then(res => {
+        // a non-200 response code
+        if (!res.ok) {
+            // create error instance with HTTP status text
+            const error = new Error(res.statusText);
+            error.json = res.json();
+            throw error;
+        }
+
+        return res.json();
+        })
+        .then(json => {
+        // set the response data
+        data.value = json.data;
+        })
+        .catch(err => {
+        error.value = err;
+        // In case a custom JSON error response was provided
+        if (err.json) {
+            return err.json.then(json => {
+            // set the JSON response message
+            error.value.message = json.message;
+            });
+        }
+        })
+        .then(() => {
+        loading.value = false;
+        });
+    }
 </script>
 
 <template>
@@ -30,21 +60,21 @@
       <form>
         <div class="input name">
           <label for='fname'>First Name</label>
-          <input id='fname' name='fname' type='text'>
+          <input v-model="formInput.firstName" type='text'>
         </div>
         <div class="input name">
           <label for='lname'>Last Name</label>
-          <input id='lname' name='lname' type='text'>
+          <input v-model="formInput.lastName" type='text'>
         </div>
         <div class="input email">
           <label for='email'>Email</label>
-          <input id='email' name='email' type='email'>
+          <input v-model="formInput.email" type='email'>
         </div>
         <div class="input password">
           <label for='password'>Password</label>
-          <input id='password' name='password' type='password'>
+          <input v-model="formInput.password" type='password'>
         </div>
-        <button class='signup' type='submit'>Sign Up</button>
+        <button class='signup' @click="signUp()">Sign Up</button>
       </form>
     </div>
 </template>

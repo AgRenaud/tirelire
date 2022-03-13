@@ -23,13 +23,13 @@ docker-compose up
 ```
 
 ### Services
-| services         | purpose                        | developed in  |
-|------------------|--------------------------------|---------------|
-| auth             | Generate Auth Token            | python 3.9.10 |
-| account          | Handle customer bank accounts  | python 3.9.10 |
-| ml-cat-operation | Classifier for bank operations | python 3.9.10 |
-| web-backend      | Back-end for web UI            | python 3.9.10 |
-| web-frontend     | Front-end for web UI           | Vue3 + Vite   |
+| services         | purpose                        | developed in  | status  |
+|------------------|--------------------------------|---------------|---------|
+| auth             | Generate Auth Token            | python 3.9.10 | 🏗️      |
+| account          | Handle customer bank accounts  | python 3.9.10 | 🏗️      |
+| ml-cat-operation | Classifier for bank operations | python 3.9.10 | 🏗️      |
+| web-backend      | Back-end for web UI            | python 3.9.10 | 🏗️      |
+| web-frontend     | Front-end for web UI           | Vue3 + Vite   | 🏗️      |
 
 ```mermaid
 flowchart LR
@@ -63,6 +63,8 @@ flowchart LR
     id_2 -.- id_6
     id_3 -.- id_6
 ```
+## Features
+### Create a new account
 
 ## Resources
 Here is a list of the usefull resources that help me to design and develop this app.
