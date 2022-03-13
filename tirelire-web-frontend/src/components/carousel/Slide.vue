@@ -19,4 +19,7 @@ export default {};
 .slide-leave-from {
   opacity: 1;
 }
+slot {
+  width: 100%;
+}
 </style>
