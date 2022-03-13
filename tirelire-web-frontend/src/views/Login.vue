@@ -1,8 +1,23 @@
 <template>
   <div class="view-container">
     <div class="carousel-container">
-      <img src="@/assets/img-main-features-presentation.svg">
-      <h1>Suivez vos comptes avec Tirelire ! 🐽</h1>
+      <!-- <img src="@/assets/img-main-features-presentation.svg">
+      <h1>Suivez vos comptes avec Tirelire ! 🐽</h1> -->
+      <Carousel
+      :navigation="true"
+      :pagination="true"
+      :startAutoPlay="false"
+      :timeout="5000"
+      class="carousel"
+      v-slot="{ currentSlide }"
+    >
+      <Slide v-for="(slide, index) in carouselSlides" :key="index">
+        <div v-show="currentSlide === index + 1" class="slide-info">
+          <img :src="`${slide.img}`" />
+          <p> {{ slide.msg }} </p>
+        </div>
+      </Slide>
+      </Carousel>
     </div>
     <div class="form-container">
       <FormSignIn />
@@ -12,6 +27,18 @@
 
 <script setup>
   import FormSignIn from '@/components/forms/FormSignIn'
+  import Carousel from '@/components/carousel/Carousel'
+  import Slide from '@/components/carousel/Slide'
+
+  import carouselImage1 from '@/assets/carousel/carousel-1.svg'
+  import carouselImage2 from '@/assets/carousel/carousel-2.svg'
+  import carouselImage3 from '@/assets/carousel/carousel-3.svg'
+
+  const carouselSlides = [
+    { "img": carouselImage1, "msg": "Rejoignez Tirelire pour suivre vos comptes !" },
+    { "img": carouselImage2, "msg": "Ajoutez vos relevé de compte à tirelire à l'aide de notre interface ..." },
+    { "img": carouselImage3, "msg": "... et analyser vos dépenses en détails !" } 
+  ]
 </script>
 
 <style scoped>
@@ -28,7 +55,6 @@
     height: auto;
   }
   .carousel-container {
-    flex-direction: column;
     color: white;
     background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.4));
     background-color: #42b983;

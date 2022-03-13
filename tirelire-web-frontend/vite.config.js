@@ -10,6 +10,7 @@ export default defineConfig({
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      path: "path-browserify",
     },
   },
 });
