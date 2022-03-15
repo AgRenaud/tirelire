@@ -65,6 +65,8 @@ services:
     container_name: "tirelire-backend"
     build:
       context: ./tirelire-web-backend
+    ports:
+      - "8000:8000"
   tirelire-web-frontend:
     container_name: "tirelire-frontend"
     build: 

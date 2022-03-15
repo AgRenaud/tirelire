@@ -16,12 +16,14 @@
 
   function signUp () {
       const backend_url = import.meta.env.VITE_BACKEND_URL
+      
       return fetch(
           backend_url + '/api/v1/register', {
-          method: 'post',
+          method: 'POST',
           headers: {
               'content-type': 'application/json'
           }
+          body: JSON.stringify(formInput)
         });
       //  .then(res => {
       //  // a non-200 response code
