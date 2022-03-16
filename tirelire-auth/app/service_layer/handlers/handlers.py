@@ -6,7 +6,7 @@ from app.adapters.redis_event_publisher import publish
 
 
 def create_user(
-    command: commands.CreateUser, uow: UnitOfWork, publish: Callable
+    command: commands.CreateUser, uow: UnitOfWork, #publish: Callable
 ) -> None:
     with uow:
         new_user = User(
@@ -19,6 +19,9 @@ def create_user(
         )
         uow.users.add(new_user)
     publish("add_user", events.UserAdded(new_user.id))
+    return {
+        'message': 'User has been created'
+    }
 
 
 def add_app_auth_to_user(

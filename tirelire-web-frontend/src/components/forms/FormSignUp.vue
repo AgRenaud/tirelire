@@ -22,9 +22,9 @@
           method: 'POST',
           headers: {
               'content-type': 'application/json'
-          }
+          },
           body: JSON.stringify(formInput)
-        });
+        })
       //  .then(res => {
       //  // a non-200 response code
       //  if (!res.ok) {
