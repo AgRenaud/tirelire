@@ -11,7 +11,6 @@ class Command:
 @dataclass
 class CreateUser(Command):
     id: str
-    username: str
     password: str
     first_name: str
     last_name: str

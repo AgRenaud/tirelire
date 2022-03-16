@@ -7,7 +7,6 @@ from app.domain.model.application import App, AppAuthorization
 @dataclass
 class User:
     id: str
-    username: str
     password: str
     first_name: str
     last_name: str

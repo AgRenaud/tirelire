@@ -11,7 +11,6 @@ def create_user(
     with uow:
         new_user = User(
             command.id,
-            command.username,
             uow.auth_service.encrypt_password(command.password),
             command.first_name,
             command.last_name,
