@@ -1,11 +1,15 @@
 import uuid
+import logging
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.entrypoints.api import schema
-from app.domain import commands
+from app.domain import commands, model
 from app.service_layer import handlers
 from app.bootstrap import bootstrap
+
+
+logger = logging.getLogger(__name__)
 
 uow = bootstrap()
 
@@ -25,8 +29,14 @@ def create_user(new_user: schema.User):
         last_name=new_user.last_name,
         email=new_user.email,
     )
-
-    return handlers.create_user(cmd, uow)
+    try:
+        return handlers.create_user(cmd, uow)
+    except model.EmailAlreadyExists as e:
+        logger.error(f'The following error occurs : {e}')
+        raise HTTPException(status_code=400, detail="Email already exists")
+    except Exception as e:
+        logger.error(f'The following error occurs : {e}')
+        raise HTTPException(status_code=500, detail="Unexpected error")
 
 
 @router.post("/authenticate")
