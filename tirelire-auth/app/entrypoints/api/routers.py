@@ -20,7 +20,6 @@ def create_id() -> str:
 def create_user(new_user: schema.User):
     cmd = commands.CreateUser(
         id=create_id(),
-        username=new_user.username,
         password=new_user.password,
         first_name=new_user.first_name,
         last_name=new_user.last_name,
