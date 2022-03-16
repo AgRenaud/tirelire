@@ -10,7 +10,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
 @_router.post('/register')
 def register(register_form: schemas.RegisterForm):
-    print(register_form)
+    
     return 200
 
 

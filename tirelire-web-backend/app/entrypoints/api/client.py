@@ -15,6 +15,7 @@ def create_app():
 
     app = FastAPI(
         title=settings.app_name,
+        description=settings.description,
         version=settings.version
     )
 
