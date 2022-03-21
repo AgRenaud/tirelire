@@ -16,7 +16,7 @@ class AuthTirelire:
         }
         req = requests.post(url, json=payload)
 
-        if not req.status_code != 200:
+        if req.status_code != 200:
             return False
         return True
 

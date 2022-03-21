@@ -8,7 +8,7 @@ class AuthenticationService:
         self.auth_service = auth
 
     def register(self, cmd: commands.Register):
-        self.auth_service.register(
+        return self.auth_service.register(
             cmd.first_name,
             cmd.last_name,
             cmd.email,

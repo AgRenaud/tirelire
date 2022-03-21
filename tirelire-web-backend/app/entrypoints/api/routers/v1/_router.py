@@ -30,7 +30,7 @@ def register(register_form: schemas.RegisterForm):
 
     # Process command
     res = auth_service.register(cmd)
-
+    
     if not res:
         return JSONResponse(status_code=503)
     return JSONResponse(status_code=201)

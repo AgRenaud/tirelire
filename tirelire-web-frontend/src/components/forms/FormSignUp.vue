@@ -8,8 +8,8 @@
   const route = useRoute()
 
   const formInput = reactive({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: ""
   })
