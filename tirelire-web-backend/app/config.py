@@ -19,13 +19,18 @@ def get_config():
         logger.error(exc)
         raise exc
 
-
-def set_up_loggers():
+def set_up_loggers() -> None:
     configuration = get_config()
 
     log_file_path = configuration["logging"]["config"]["path"]
     logging.config.fileConfig(log_file_path, disable_existing_loggers=True)
 
+def get_auth_uri() -> str:
+    configuration = get_config()
 
-def check_config_file():
+    uri=configuration['auth-service']['uri']
+
+    return uri
+
+def check_config_file() -> None:
     get_config()

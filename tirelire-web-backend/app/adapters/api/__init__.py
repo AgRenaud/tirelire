@@ -1,0 +1,1 @@
+from app.adapters.api import auth

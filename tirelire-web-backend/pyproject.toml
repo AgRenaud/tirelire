@@ -17,6 +17,7 @@ uuid = "^1.30"
 uvicorn = "^0.17.0"
 redis = "^4.1.2"
 requests = "^2.27.1"
+python-multipart = "^0.0.5"
 
 [tool.poetry.dev-dependencies]
 coverage = {version = "^6.2", extras = ["toml"]}

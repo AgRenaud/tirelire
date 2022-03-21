@@ -61,6 +61,9 @@ services:
   backend:
     build:
       context: ./tirelire-web-backend
+    environment: 
+      <<: *tirelire-common-env
+      AUTH_SERVICE_URL: http://auth-api:8000
     ports:
       - "8000:8000"
   frontend:

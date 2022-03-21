@@ -8,6 +8,7 @@ on:
 jobs:
   tests:
     strategy:
+      max-parallel: 1
       matrix: { service: ['./tirelire-account', './tirelire-auth', './tirelire-ml-cat-operation', './tirelire-web-backend'] }
     runs-on: ubuntu-latest
     steps:
