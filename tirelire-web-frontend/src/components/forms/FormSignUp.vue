@@ -61,11 +61,11 @@
       <form>
         <div class="input name">
           <label for='fname'>First Name</label>
-          <input v-model="formInput.firstName" type='text'>
+          <input v-model="formInput.first_name" type='text'>
         </div>
         <div class="input name">
           <label for='lname'>Last Name</label>
-          <input v-model="formInput.lastName" type='text'>
+          <input v-model="formInput.last_name" type='text'>
         </div>
         <div class="input email">
           <label for='email'>Email</label>

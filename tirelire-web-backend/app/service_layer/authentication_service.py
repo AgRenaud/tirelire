@@ -1,5 +1,10 @@
+import logging
+
 from app.adapters.api import auth
 from app.model import commands
+
+
+logger = logging.getLogger(__name__)
 
 
 class AuthenticationService:
