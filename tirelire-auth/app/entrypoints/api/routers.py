@@ -32,10 +32,10 @@ def create_user(new_user: schema.User):
     try:
         return handlers.create_user(cmd, uow)
     except model.EmailAlreadyExists as e:
-        logger.error(f'The following error occurs : {e}')
+        logger.error(f"The following error occurs : {e}")
         raise HTTPException(status_code=400, detail="Email already exists")
     except Exception as e:
-        logger.error(f'The following error occurs : {e}')
+        logger.error(f"The following error occurs : {e}")
         raise HTTPException(status_code=500, detail="Unexpected error")
 
 
