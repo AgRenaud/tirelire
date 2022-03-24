@@ -65,8 +65,7 @@ class TestHandlers(TestCase):
     def test_create_user_must_create_user(self):
         uow = bootstrap_test_app()
         command = commands.CreateUser(
-            "id1234", 
-            "jdoe", 
+            "id1234",
             "secure_password", 
             "john", 
             "doe", 
@@ -78,8 +77,7 @@ class TestHandlers(TestCase):
     def test_add_app_auth_to_user_must_return(self):
         uow = bootstrap_test_app()
         command = commands.CreateUser(
-            "id1234", 
-            "jdoe", 
+            "id1234",
             "secure_password", 
             "john", 
             "doe", 
@@ -100,8 +98,7 @@ class TestHandlers(TestCase):
     def test_get_token_must_return_token(self):
         uow = bootstrap_test_app()
         command = commands.CreateUser(
-            "id1234", 
-            "jdoe", 
+            "id1234",
             "secure_password", 
             "john", 
             "doe", 

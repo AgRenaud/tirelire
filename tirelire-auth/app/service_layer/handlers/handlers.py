@@ -4,12 +4,12 @@ from sqlalchemy.exc import IntegrityError
 
 from app.domain import model, commands, events
 from app.service_layer.unit_of_work import UnitOfWork
-from app.adapters.redis_event_publisher import publish
 
 
 def create_user(
     command: commands.CreateUser,
-    uow: UnitOfWork,  # publish: Callable
+    uow: UnitOfWork,
+    publish: Callable
 ) -> None:
     try:
         with uow:
