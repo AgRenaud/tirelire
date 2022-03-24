@@ -23,13 +23,13 @@ docker-compose up
 ```
 
 ### Services
-| services         | purpose                        | developed in  |
-|------------------|--------------------------------|---------------|
-| auth             | Generate Auth Token            | python 3.9.10 |
-| account          | Handle customer bank accounts  | python 3.9.10 |
-| ml-cat-operation | Classifier for bank operations | python 3.9.10 |
-| web-backend      | Back-end for web UI            | python 3.9.10 |
-| web-frontend     | Front-end for web UI           | Vue3 + Vite   |
+| services         | purpose                        | developed in  | status  |
+|------------------|--------------------------------|---------------|---------|
+| auth             | Generate Auth Token            | python 3.9.10 | 🏗️      |
+| account          | Handle customer bank accounts  | python 3.9.10 | 🏗️      |
+| ml-cat-operation | Classifier for bank operations | python 3.9.10 | 🏗️      |
+| web-backend      | Back-end for web UI            | python 3.9.10 | 🏗️      |
+| web-frontend     | Front-end for web UI           | Vue3 + Vite   | 🏗️      |
 
 ```mermaid
 flowchart LR
@@ -62,6 +62,23 @@ flowchart LR
     id_1 -.- id_6
     id_2 -.- id_6
     id_3 -.- id_6
+```
+## Features
+### Create a new account
+![](./docs/img/sign-up-page.png)
+
+```mermaid
+sequenceDiagram 
+    actor client
+    participant frontend
+    participant backend
+    participant auth_service
+
+    client ->> frontend: fill sign up form
+    frontend ->> backend: POST /api/v1/register
+    backend ->> auth_service: POST /api/v1/create_user
+    auth_service ->> backend: 200
+    backend ->> frontend: 200
 ```
 
 ## Resources

@@ -8,19 +8,26 @@ on:
 jobs:
   tests:
     strategy:
+      max-parallel: 1
       matrix: { service: ['./tirelire-account', './tirelire-auth', './tirelire-ml-cat-operation', './tirelire-web-backend'] }
+    env:
+      RUNNER_ALLOW_RUNASROOT: 1
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
+      - name: Install PostgreSQL
+        env:
+          POSTGRESQL_VERSION: 12
+        run: |
+          sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+          apt-get update
+          apt-get -y install "postgresql-$POSTGRESQL_VERSION"
       - name: Set up python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9.10
-      - name: Set up postgres
-        uses: harmon758/postgresql-action@v1
-        with:
-          postgresql version: '11'
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:

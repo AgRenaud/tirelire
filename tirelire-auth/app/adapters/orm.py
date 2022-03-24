@@ -36,7 +36,6 @@ users = Table(
     "users",
     mapper_registry.metadata,
     Column("id", Text, primary_key=True),
-    Column("username", Text),
     Column("password", Text),
     Column("first_name", Text),
     Column("last_name", Text),

@@ -21,8 +21,17 @@ STREAMS = {"add_application": ">"}
 def main():
     logger.info("Start redis listener")
     bus = bootstrap.bootstrap()
-    r.xgroup_create("add_user", GROUP_NAME, "$", True)
-    r.xgroup_create("add_application", GROUP_NAME, "$", True)
+    
+    try:
+        r.xgroup_create("add_user", GROUP_NAME, "$", True)
+    except redis.exceptions.ResponseError as e:
+        logger.warning("Redis XGroup already exists.")
+
+    try:
+        r.xgroup_create("add_application", GROUP_NAME, "$", True)
+    except redis.exceptions.ResponseError as e:
+        logger.warning("Redis XGroup already exists.")
+
 
     while True:
         events_batch = redis_conn.get_events_batche(GROUP_NAME, STREAMS)

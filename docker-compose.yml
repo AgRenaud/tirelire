@@ -7,13 +7,12 @@ x-tirelire-common:
       POSTGRES_PASSWORD: psswd1234
       POSTGRES_HOST: postgres
       POSTGRES_PORT: "5432"
-      REDIS_HOST: redis
+      REDIS_HOST: broker
       REDIS_PORT: "6379"
       REDIS_PASSWORD: "MyRedisPassword"
 
 services:
-  account-service-api:
-    container_name: "tirelire-account-api"
+  account-api:
     build: 
       context: ./tirelire-account
     environment: 
@@ -28,9 +27,8 @@ services:
       - "./tirelire-account/app:/app"
     depends_on:
       - postgres
-      - redis
-  auth-service-api:
-    container_name: "tirelire-auth-api"
+      - broker
+  auth-api:
     build:
       context: ./tirelire-auth
     environment: 
@@ -45,9 +43,8 @@ services:
       - "./tirelire-auth/app:/app"
     depends_on:
       - postgres
-      - redis
-  auth-service-event-listener:
-    container_name: "tirelire-auth-event-consumer"
+      - broker
+  auth-event-listener:
     build:
       context: ./tirelire-auth
     environment: 
@@ -60,7 +57,22 @@ services:
       - "./tirelire-auth/app:/app"
     depends_on:
       - postgres
-      - redis
+      - broker
+  backend:
+    build:
+      context: ./tirelire-web-backend
+    environment: 
+      <<: *tirelire-common-env
+      AUTH_SERVICE_URL: http://auth-api:8000
+    ports:
+      - "8000:8000"
+  frontend:
+    build: 
+      context: ./tirelire-web-frontend
+    environment:
+      BACKEND_URL: http://backend:8000
+    depends_on:
+      - backend
   nginx:
     image: nginx:latest
     restart: always
@@ -68,24 +80,21 @@ services:
       NGINX_HOST: localhost
       NGINX_PORT_HTTP: 80
       NGINX_PROXY_TIMEOUT: 180
-      FRONTEND_URL: 'tirelire-web-frontend'
+      FRONTEND_URL: 'frontend'
       FRONTEND_PORT: 80
     ports:
       - "8080:80"
     volumes:
       - ./nginx.conf:/etc/nginx/templates/default.conf.template
     depends_on:
-      - tirelire-web-frontend
-  tirelire-web-frontend:
-    build: 
-      context: ./tirelire-web-frontend
+      - frontend
   postgres:
     image: postgres:9.6
     env_file: 
       - dev-database.conf
     volumes:
         - ./docker/docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
-  redis:
+  broker:
     image: redis:alpine
     environment:
      REDIS_REPLICATION_MODE: "master"
