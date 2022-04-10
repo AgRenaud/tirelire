@@ -20,6 +20,8 @@ jobs:
         uses: harmon758/postgresql-action@v1
         with:
           postgresql version: '12'
+      - name: Start Redis
+        run: sudo apt-get install -y redis-tools redis-server
       - name: Set up python
         uses: actions/setup-python@v2
         with:
