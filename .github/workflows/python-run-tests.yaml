@@ -17,13 +17,9 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
       - name: Install PostgreSQL
-        env:
-          POSTGRESQL_VERSION: 12
-        run: |
-          sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-          apt-get update
-          apt-get -y install "postgresql-$POSTGRESQL_VERSION"
+        uses: harmon758/postgresql-action@v1
+        with:
+          postgresql version: '12'
       - name: Set up python
         uses: actions/setup-python@v2
         with:
