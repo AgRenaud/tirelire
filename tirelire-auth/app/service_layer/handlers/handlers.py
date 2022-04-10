@@ -7,9 +7,7 @@ from app.service_layer.unit_of_work import UnitOfWork
 
 
 def create_user(
-    command: commands.CreateUser,
-    uow: UnitOfWork,
-    publish: Callable
+    command: commands.CreateUser, uow: UnitOfWork, publish: Callable
 ) -> None:
     try:
         with uow:
