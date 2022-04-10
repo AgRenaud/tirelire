@@ -20,7 +20,6 @@ class UnitOfWork(abc.ABC):
             self.commit()
         else:
             self.rollback()
-            print(exn_type, exn_value, traceback)
             raise traceback
 
     def commit(self):

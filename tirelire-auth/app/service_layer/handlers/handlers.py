@@ -4,11 +4,10 @@ from sqlalchemy.exc import IntegrityError
 
 from app.domain import model, commands, events
 from app.service_layer.unit_of_work import UnitOfWork
-from app.adapters.redis_event_publisher import publish
 
 
 def create_user(
-    command: commands.CreateUser, uow: UnitOfWork, #publish: Callable
+    command: commands.CreateUser, uow: UnitOfWork, publish: Callable
 ) -> None:
     try:
         with uow:
@@ -20,16 +19,13 @@ def create_user(
                 command.email,
             )
             uow.users.add(new_user)
+        publish("add_user", events.UserAdded(new_user.id))
+        return {"message": "User has been created"}
     except IntegrityError as e:
         if isinstance(e.orig, UniqueViolation):
             raise model.EmailAlreadyExists
         else:
-            raise Exception('Unknown exception')
-
-    publish("add_user", events.UserAdded(new_user.id))
-    return {
-        'message': 'User has been created'
-    }
+            raise Exception("Unknown exception")
 
 
 def add_app_auth_to_user(

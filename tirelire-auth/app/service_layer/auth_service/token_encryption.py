@@ -11,8 +11,6 @@ class TokenEncryptionService:
     def encrypt_token(self, payload: dict) -> str:
         sk = SigningKey.from_pem(self.private_key)
         token: str = jwt.encode(payload, sk.to_pem(), algorithm="ES256")
-        print(token)
-        print(sk.sign(token.encode("utf-8")))
         return token
 
     def verify_token(self, token: str) -> bool:

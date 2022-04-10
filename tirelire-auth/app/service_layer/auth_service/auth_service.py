@@ -51,5 +51,4 @@ class AuthServiceImpl:
         )
 
     def verify_token(self, token: str) -> bool:
-        print(self.token_encryption.verify_token(token))
         return True

@@ -31,6 +31,13 @@ docker-compose up
 | web-backend      | Back-end for web UI            | python 3.9.10 | 🏗️      |
 | web-frontend     | Front-end for web UI           | Vue3 + Vite   | 🏗️      |
 
+### Testing suite
+
+in order to be able to run all the test suite you must install `postgresql` and `redis-server`.
+
+Then each python projet has a test suite that can be run with `poetry run test`. You can check the coverage with `poetry run report`.
+
+
 ```mermaid
 flowchart LR
     subgraph Web app

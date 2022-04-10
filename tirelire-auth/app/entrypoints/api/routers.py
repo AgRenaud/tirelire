@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException
 from app.entrypoints.api import schema
 from app.domain import commands, model
 from app.service_layer import handlers
+from app.adapters.redis_event_publisher import publish
 from app.bootstrap import bootstrap
 
 
@@ -30,12 +31,12 @@ def create_user(new_user: schema.User):
         email=new_user.email,
     )
     try:
-        return handlers.create_user(cmd, uow)
+        return handlers.create_user(cmd, uow, publish)
     except model.EmailAlreadyExists as e:
-        logger.error(f'The following error occurs : {e}')
+        logger.error(f"The following error occurs : {e}")
         raise HTTPException(status_code=400, detail="Email already exists")
     except Exception as e:
-        logger.error(f'The following error occurs : {e}')
+        logger.error(f"The following error occurs : {e}")
         raise HTTPException(status_code=500, detail="Unexpected error")
 
 

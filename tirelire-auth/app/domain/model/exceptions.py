@@ -1,5 +1,5 @@
 class EmailAlreadyExists(Exception):
-    
+
     msg = "Email already exists !"
 
     def __init__(self):
