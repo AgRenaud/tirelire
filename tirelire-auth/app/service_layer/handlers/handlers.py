@@ -21,14 +21,13 @@ def create_user(
                 command.email,
             )
             uow.users.add(new_user)
+        publish("add_user", events.UserAdded(new_user.id))
+        return {"message": "User has been created"}
     except IntegrityError as e:
         if isinstance(e.orig, UniqueViolation):
             raise model.EmailAlreadyExists
         else:
             raise Exception("Unknown exception")
-
-    publish("add_user", events.UserAdded(new_user.id))
-    return {"message": "User has been created"}
 
 
 def add_app_auth_to_user(
