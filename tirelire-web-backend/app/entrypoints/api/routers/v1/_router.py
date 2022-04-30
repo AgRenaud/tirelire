@@ -14,7 +14,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
 
 @_router.post('/register')
-def register(register_form: schemas.RegisterForm):
+def register(register_form: schemas.Register):
     # Parse command
     cmd = commands.Register(
         register_form.first_name,
@@ -34,6 +34,24 @@ def register(register_form: schemas.RegisterForm):
     if not res:
         return JSONResponse(status_code=503)
     return JSONResponse(status_code=201)
+
+@_router.post('/login')
+def register(register_form: schemas.Login):
+    # Parse command
+    cmd = commands.Login(
+        register_form.email,
+        register_form.password
+    )
+
+    # Init necessary service
+    auth_service = AuthenticationService(
+        AuthTirelire(config.get_auth_uri())
+    )
+
+    # Process command
+    res = auth_service.login(cmd)
+    
+    return res
 
 
 @_router.post('/token')

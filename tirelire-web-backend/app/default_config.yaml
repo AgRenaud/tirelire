@@ -4,3 +4,10 @@ logging:
     path: ${APP_PATH}/default_logging.ini
 auth-service:
   uri: ${AUTH_SERVICE_URL}
+session-manager:
+    redis:
+      host: ${SESSION_MANAGER_HOST}
+      port: ${SESSION_MANAGER_PORT}
+      password: ${SESSION_MANAGER_PASSWORD}
+session:
+  lifetime: 604800 # seconds

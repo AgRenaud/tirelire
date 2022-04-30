@@ -7,9 +7,9 @@ x-tirelire-common:
       POSTGRES_PASSWORD: psswd1234
       POSTGRES_HOST: postgres
       POSTGRES_PORT: "5432"
-      REDIS_HOST: broker
-      REDIS_PORT: "6379"
-      REDIS_PASSWORD: "MyRedisPassword"
+      BROKER_HOST: broker
+      BROKER_PORT: "6379"
+      BROKER_PASSWORD: "MyRedisPassword"
 
 services:
   account-api:
@@ -64,6 +64,9 @@ services:
     environment: 
       <<: *tirelire-common-env
       AUTH_SERVICE_URL: http://auth-api:8000
+      SESSION_MANAGER_HOST: session-manager
+      SESSION_MANAGER_PORT: "6379"
+      SESSION_MANAGER_PASSWORD: "MyRedisPassword"
     ports:
       - "8000:8000"
   frontend:
@@ -97,9 +100,14 @@ services:
   broker:
     image: redis:alpine
     environment:
-     REDIS_REPLICATION_MODE: "master"
-    ports:
-     - "6379:6379"
+      REDIS_REPLICATION_MODE: "master"
+    command: [
+      "redis-server", "--requirepass", "MyRedisPassword"
+      ]
+  session-manager:
+    image: redis:alpine
+    environment:
+      REDIS_REPLICATION_MODE: "master"
     command: [
       "redis-server", "--requirepass", "MyRedisPassword"
       ]

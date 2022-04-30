@@ -22,7 +22,15 @@ class AuthTirelire:
 
     def authenticate(
         self,
-
-    ):
+        email: str, password: str
+    ) -> dict:
         url = f"{self.url}/api/v1/authenticate"
-        raise NotImplementedError
+        payload = {
+            "email": email,
+            "password": password
+        }
+        req = requests.post(url, json=payload)
+        if not req.ok:
+            raise ValueError(f'Unable to authenticate. Response code: {req.status_code} ; content: {req.content}')
+        
+        return req.json()
