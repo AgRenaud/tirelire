@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
@@ -7,6 +7,7 @@ from app.model import commands
 from app.entrypoints.api.routers.v1 import schemas
 from app.adapters.api.auth import AuthTirelire
 from app.service_layer.authentication_service import AuthenticationService
+from app.adapters.session_manager import RedisSessionManager
 
 _router = APIRouter()
 
@@ -36,7 +37,7 @@ def register(register_form: schemas.Register):
     return JSONResponse(status_code=201)
 
 @_router.post('/login')
-def register(register_form: schemas.Login):
+def register(register_form: schemas.Login, response: Response):
     # Parse command
     cmd = commands.Login(
         register_form.email,
@@ -45,13 +46,16 @@ def register(register_form: schemas.Login):
 
     # Init necessary service
     auth_service = AuthenticationService(
-        AuthTirelire(config.get_auth_uri())
+        AuthTirelire(config.get_auth_uri()),
+        RedisSessionManager(*config.get_redis_session_manager_conf())
     )
 
     # Process command
-    res = auth_service.login(cmd)
+    session_id = auth_service.login(cmd)
     
-    return res
+    response.set_cookie(key="tirelire-session", value=session_id)
+
+    return True
 
 
 @_router.post('/token')

@@ -30,13 +30,12 @@ class AuthenticationService:
 
     def login(self, cmd: commands.Login):
         auth = self.auth_service.authenticate(cmd.email, cmd.password)
-        token = auth.get('token')
+        token = auth.get('access_token')
         uid = create_uid()
 
         self.session_manager.create_session(uid, token, config.get_session_expires_time())
-        
 
-        return True
+        return uid
 
     def logout(self, cmd: commands.Login):
         raise NotImplementedError
