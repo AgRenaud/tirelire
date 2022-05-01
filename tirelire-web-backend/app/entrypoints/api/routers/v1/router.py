@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response, Request
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 
@@ -60,7 +60,20 @@ def login(register_form: schemas.Login, response: Response):
 
     return True
 
+@v1_router.post('/logout')
+def logout(request: Request, oauth2_scheme: str = Depends(oauth2_scheme)):
+    
+    # Parse command
+    cmd = commands.Logout(
+        session_id=request.cookies.get('tirelire-session')
+    )
 
-@v1_router.post('/test')
-def get_token(oauth2_scheme: str = Depends(oauth2_scheme)):
-    return 'Hello word'
+    # Init necessary service
+    auth_service = AuthenticationService(
+        AuthTirelire(config.get_auth_uri()),
+        RedisSessionManager(*config.get_redis_session_manager_conf())
+    )
+
+    auth_service.logout(cmd)
+
+    return True

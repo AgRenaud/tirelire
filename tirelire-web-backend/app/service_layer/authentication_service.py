@@ -37,5 +37,5 @@ class AuthenticationService:
 
         return uid
 
-    def logout(self, cmd: commands.Login):
-        raise NotImplementedError
+    def logout(self, cmd: commands.Logout):
+        self.session_manager.delete_session(cmd.session_id)

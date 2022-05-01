@@ -28,12 +28,10 @@ def create_app():
         CORSMiddleware,
         allow_origins=["*"],
         allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+        allow_headers=["Access-Control-Allow-Origin, Content-Type, Origin, Accept"],
     )
 
     logger.info("Add router")
     app.include_router(v1_router, prefix="/api")
-    
 
     return app

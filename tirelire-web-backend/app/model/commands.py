@@ -18,3 +18,7 @@ class Register(Command):
 class Login(Command):
     email: str
     password: str
+
+@dataclass
+class Logout(Command):
+    session_id: str

@@ -1,6 +1,4 @@
-import logging
 import redis
-
 
 
 class RedisSessionManager:
@@ -9,7 +7,11 @@ class RedisSessionManager:
         self.client = redis.Redis(decode_responses=True, host=host, port=port, password=password)
 
     def create_session(self, uid: str, token: str, expire_time_in_seconds: int) -> None:
-        self.client.set(name=uid, value=token, ex=expire_time_in_seconds)
+        self.client.hmset(name=uid, mapping={"token": token})
+        self.client.expire(name=uid, time=expire_time_in_seconds)
 
-    def get_session_token(self, uid: str):
-        return self.client.get(name=uid)
+    def get_session(self, uid: str) -> dict:
+        return self.client.hgetall(name=uid)
+
+    def delete_session(self, uid: str) -> None:
+        self.client.delete(uid)

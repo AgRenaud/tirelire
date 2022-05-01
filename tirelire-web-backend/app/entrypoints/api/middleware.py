@@ -17,8 +17,10 @@ class AuthMiddleware:
         cookie_session = cookies.get('tirelire-session')
         if cookie_session:
             session_manager = RedisSessionManager(*config.get_redis_session_manager_conf())
-            token = session_manager.get_session_token(cookie_session)
-            headers[b"authorization"] = f'Bearer {token}'.encode('utf-8')
+            token = session_manager.get_session(cookie_session)
+            if token: 
+                token = token.get('cookie')
+                headers[b"authorization"] = f'Bearer {token}'.encode('utf-8')
         scope["headers"] = [(k, v) for k, v in headers.items()]
         await self.app(scope, receive, send)
 
