@@ -45,11 +45,11 @@ flowchart TB
     session_manager[(Session manager - Redis)]
     db_1[(Database)]
     db_2[(Database)]
-    broker[Message broker - Redis]
+    broker[(Message broker - Redis)]
 
     account --> ml_1
     backend --> auth
-    backend -.- session_manager
+    backend -.-> session_manager
     backend --> account
     frontend --> backend
     
