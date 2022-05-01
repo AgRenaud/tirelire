@@ -2,8 +2,10 @@ import logging
 
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from app import config
+from app.entrypoints.api.middleware import auth_middleware
 from app.entrypoints.api.settings import settings
 from app.entrypoints.api.routers import v1_router
 
@@ -19,6 +21,8 @@ def create_app():
         description=settings.description,
         version=settings.version
     )
+
+    app.add_middleware(BaseHTTPMiddleware, dispatch=auth_middleware)
 
     app.add_middleware(
         CORSMiddleware,

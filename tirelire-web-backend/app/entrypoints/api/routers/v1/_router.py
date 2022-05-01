@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response, Request
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
@@ -37,7 +37,7 @@ def register(register_form: schemas.Register):
     return JSONResponse(status_code=201)
 
 @_router.post('/login')
-def register(register_form: schemas.Login, response: Response):
+def login(register_form: schemas.Login, response: Response):
     # Parse command
     cmd = commands.Login(
         register_form.email,
@@ -59,5 +59,5 @@ def register(register_form: schemas.Login, response: Response):
 
 
 @_router.post('/token')
-def register(form_data: OAuth2PasswordRequestForm = Depends()):
+def get_token(form_data: OAuth2PasswordRequestForm = Depends()):
     return {'access_token': form_data}
