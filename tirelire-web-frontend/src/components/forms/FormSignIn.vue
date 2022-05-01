@@ -1,27 +1,35 @@
 <script setup>
   import { reactive } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
-
-  import auth from '@/auth'
-
-  const router = useRouter()
-  const route = useRoute()
+  import axios from 'axios';
 
   const formInput = reactive({
     email: "",
     password: ""
   })
 
-  function login () {
-    auth.login(formInput.email, formInput.password, loggedIn => {
-      if (!loggedIn) {
-        this.error = true
-      } else {
-        router.replace(route.query.redirect || '/')
-        router.go()
-      }
-    })
-  }
+  function signIn () {
+      const backend_url = import.meta.env.VITE_BACKEND_URL
+      const response = axios.post(
+          backend_url + '/api/v1/login',
+          JSON.stringify(formInput),
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+        ).then((response) => { console.log(response); }
+        ).catch((error) => {
+          if( error.response ){
+            console.log(error.response.data);
+            }
+          console.log(error)
+          }
+        );
+      
+      console.log(response)
+
+    }
+
 </script>
 
 <template>
@@ -36,7 +44,7 @@
           <label for='password'>Password</label>
           <input v-model="formInput.password" type='password'>
         </div>
-        <button class='signup' @click="login()">Sign In</button>
+        <button type="button" class='signin' @click="signIn()">Sign In</button>
       </form>
     </div>
 </template>
@@ -69,7 +77,7 @@
       font-size: 0.75rem;
       font-weight: 500;
   }
-  .signup {
+  .signin {
       display: block;
       width: 100%;
       background-color: #42b983;
@@ -82,7 +90,7 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
   }
-  .signup:hover {
+  .signin:hover {
       background: #14985d;
       cursor: pointer;
       transition: 0.15s ease;

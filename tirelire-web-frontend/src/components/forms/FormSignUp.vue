@@ -1,12 +1,6 @@
 <script setup>
   import { reactive } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
   import axios from 'axios';
-
-  import auth from '@/auth'
-
-  const router = useRouter()
-  const route = useRoute()
 
   const formInput = reactive({
     first_name: "",

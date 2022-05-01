@@ -2,7 +2,6 @@ import logging
 
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from starlette.middleware.base import BaseHTTPMiddleware
 
 from app import config
 from app.entrypoints.api.middleware import AuthMiddleware
@@ -28,6 +27,7 @@ def create_app():
         CORSMiddleware,
         allow_origins=["*"],
         allow_credentials=True,
+        allow_methods=["*"],
         allow_headers=["Access-Control-Allow-Origin, Content-Type, Origin, Accept"],
     )
 

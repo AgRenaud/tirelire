@@ -77,3 +77,8 @@ def logout(request: Request, oauth2_scheme: str = Depends(oauth2_scheme)):
     auth_service.logout(cmd)
 
     return True
+
+@v1_router.post('/users/me')
+def logout(oauth2_scheme: str = Depends(oauth2_scheme)):
+    
+    return {}
