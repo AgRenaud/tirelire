@@ -32,5 +32,19 @@ def get_auth_uri() -> str:
 
     return uri
 
+def get_redis_session_manager_conf():
+    configuration = get_config()
+
+    host=configuration['session-manager']['redis']['host']
+    port=configuration['session-manager']['redis']['port']
+    password=configuration['session-manager']['redis']['password']
+    
+    return (host, port, password)
+
+def get_session_expires_time():
+    configuration = get_config()
+
+    return int(configuration['session']['lifetime'])
+
 def check_config_file() -> None:
     get_config()

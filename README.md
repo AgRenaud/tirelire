@@ -39,54 +39,32 @@ Then each python projet has a test suite that can be run with `poetry run test`.
 
 
 ```mermaid
-flowchart LR
-    subgraph Web app
-        direction RL
-        id_4[web-backend]
-        id_5[web-frontend]
-    end
-    subgraph Persistence
-        db[(Database)]
-    end
-    subgraph Tirelire Services
-        direction TB
-        id_1[auth]
-        id_2[account]
-        id_3[ml-cat-operation]
-    end
-    subgraph Message Broker
-        id_6[Redis]
-    end
-    
-    id_2 --- id_3
-    id_4 --- id_1
-    id_4 --- id_2
-    id_5 --- id_4
-    
-    id_1 -.- db
-    id_2 -.- db
+flowchart TB
 
-    id_1 -.- id_6
-    id_2 -.- id_6
-    id_3 -.- id_6
+    ml_1[ml-cat-operation]
+    session_manager[(Session manager - Redis)]
+    db_1[(Database)]
+    db_2[(Database)]
+    broker[(Message broker - Redis)]
+
+    account --> ml_1
+    backend --> auth
+    backend -.-> session_manager
+    backend --> account
+    frontend --> backend
+    
+    
+    auth -.-> db_1
+    account -.-> db_2
+
+    auth <-.-> broker
+    account <-.-> broker
+    ml_1 <-.-> broker
 ```
 ## Features
 ### Create a new account
 ![](./docs/img/sign-up-page.png)
 
-```mermaid
-sequenceDiagram 
-    actor client
-    participant frontend
-    participant backend
-    participant auth_service
-
-    client ->> frontend: fill sign up form
-    frontend ->> backend: POST /api/v1/register
-    backend ->> auth_service: POST /api/v1/create_user
-    auth_service ->> backend: 200
-    backend ->> frontend: 200
-```
 
 ## Resources
 Here is a list of the usefull resources that help me to design and develop this app.
