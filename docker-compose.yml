@@ -69,6 +69,15 @@ services:
       SESSION_MANAGER_PASSWORD: "MyRedisPassword"
     ports:
       - "8000:8000"
+    volumes:
+      - "./tirelire-web-backend/app:/app"
+    depends_on:
+      - session-manager
+      - auth-api
+      - account-api
+    command: [
+      "uvicorn", "app.entrypoints.api.client:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"
+      ]
   frontend:
     build: 
       context: ./tirelire-web-frontend
