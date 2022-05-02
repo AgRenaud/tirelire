@@ -1,6 +1,13 @@
 <script setup>
-  import { reactive } from 'vue'
-  import axios from 'axios';
+  import { ref, reactive } from 'vue'
+
+  import { useRouter } from "vue-router";
+  import { useAuthStore } from "@/stores/useAuth.js";
+
+
+  const loading = ref(false);
+  const router = useRouter();
+
 
   const formInput = reactive({
     first_name: "",
@@ -10,27 +17,13 @@
   })
 
   function signUp () {
-      const backend_url = import.meta.env.VITE_BACKEND_URL
-      const response = axios.post(
-          backend_url + '/api/v1/register',
-          JSON.stringify(formInput),
-          {
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          }
-        ).then((response) => { console.log(response); }
-        ).catch((error) => {
-          if( error.response ){
-            console.log(error.response.data);
-            }
-          console.log(error)
-          }
-        );
-      
-      console.log(response)
+        useAuthStore()
+          .register(
+            JSON.stringify(formInput)
+          )
+          .then(() => router.push({ name: "index" }))
+          .catch(() => (loading.value = !loading.value));
     }
-
 </script>
 
 <template>

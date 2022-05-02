@@ -2,17 +2,17 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App'
-import router from './router'
-import axios from 'axios';
+import router from "./router";
+import axios from "./plugins/axios";
+import auth from "./plugins/auth";
+
+import VueAxios from "vue-axios";
 
 import '@fortawesome/fontawesome-free/js/all'
 
-axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:8000/'
-
-const app = createApp(App)
-
-app.use(router)
-app.use(createPinia())
-
-app.mount('#app')
+createApp(App)
+    .use(createPinia())
+    .use(auth)
+    .use(router)
+    .use(VueAxios, axios)
+    .mount('#app')

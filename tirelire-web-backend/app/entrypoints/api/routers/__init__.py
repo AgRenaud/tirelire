@@ -1,1 +1,0 @@
-from app.entrypoints.api.routers.v1.router import v1_router

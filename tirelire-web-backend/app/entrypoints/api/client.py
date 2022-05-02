@@ -6,7 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 from app import config
 from app.entrypoints.api.middleware import AuthMiddleware
 from app.entrypoints.api.settings import settings
-from app.entrypoints.api.routers import v1_router
+from app.entrypoints.api.v1.router import v1_router
 
 logger = logging.getLogger(__name__)
 
