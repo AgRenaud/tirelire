@@ -81,8 +81,12 @@ services:
   frontend:
     build: 
       context: ./tirelire-web-frontend
+      target: develop-stage
     environment:
       BACKEND_URL: http://backend:8000
+    command: [
+      "npm", "run", "dev", "--", "--host"
+    ]
     depends_on:
       - backend
   nginx:
@@ -93,7 +97,7 @@ services:
       NGINX_PORT_HTTP: 80
       NGINX_PROXY_TIMEOUT: 180
       FRONTEND_URL: 'frontend'
-      FRONTEND_PORT: 80
+      FRONTEND_PORT: 3000
     ports:
       - "8080:80"
     volumes:

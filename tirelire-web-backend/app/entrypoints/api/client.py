@@ -28,10 +28,10 @@ def create_app():
         allow_origins=["*"],
         allow_credentials=True,
         allow_methods=["*"],
-        allow_headers=["Access-Control-Allow-Origin, Content-Type, Origin, Accept"],
+        allow_headers=["*"],
     )
 
     logger.info("Add router")
-    app.include_router(v1_router, prefix="/api")
+    app.include_router(v1_router, prefix="/api", tags=['user'])
 
     return app
