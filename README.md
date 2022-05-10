@@ -27,6 +27,7 @@ docker-compose up
 |------------------|--------------------------------|---------------|---------|
 | auth             | Generate Auth Token            | python 3.9.10 | 🏗️      |
 | account          | Handle customer bank accounts  | python 3.9.10 | 🏗️      |
+| user             | Handle user profile            | python 3.9.10 | 🏗️      |
 | ml-cat-operation | Classifier for bank operations | python 3.9.10 | 🏗️      |
 | web-backend      | Back-end for web UI            | python 3.9.10 | 🏗️      |
 | web-frontend     | Front-end for web UI           | Vue3 + Vite   | 🏗️      |
@@ -45,21 +46,42 @@ flowchart TB
     session_manager[(Session manager - Redis)]
     db_1[(Database)]
     db_2[(Database)]
+    db_3[(Database)]
     broker[(Message broker - Redis)]
 
-    account --> ml_1
     backend --> auth
     backend -.-> session_manager
     backend --> account
+    backend --> user
+    
     frontend --> backend
     
-    
-    auth -.-> db_1
-    account -.-> db_2
+    account --> ml_1
+
+    auth -.- db_1
+    account -.- db_2
+    user -.- db_3
 
     auth <-.-> broker
     account <-.-> broker
     ml_1 <-.-> broker
+    user<-.->broker
+
+    subgraph Website
+        frontend
+        backend
+    end
+
+    subgraph Services
+        account
+        auth
+        user
+        broker
+        ml_1
+        db_1
+        db_2
+        db_3
+    end
 ```
 ## Features
 ### Create a new account

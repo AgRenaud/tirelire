@@ -17,12 +17,12 @@ def create_id():
     return str(uuid4())
 
 
-@router.post("/")
-def add_holder():
-    new_id = create_id()
-    cmd = commands.CreateHolder(new_id)
-    bus.handle(cmd)
-    return {"holder_id": new_id}
+# @router.post("/")
+# def add_holder():
+#     new_id = create_id()
+#     cmd = commands.CreateHolder(new_id)
+#     bus.handle(cmd)
+#     return {"holder_id": new_id}
 
 
 @router.get("/{holder_id}")
