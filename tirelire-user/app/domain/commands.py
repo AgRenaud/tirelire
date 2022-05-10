@@ -14,3 +14,8 @@ class CreateUser(Command):
     first_name: str
     last_name: str
     email: str
+
+
+@dataclass
+class VerifyToken(Command):
+    token: str
