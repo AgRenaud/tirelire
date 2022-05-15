@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Set
+from typing import Optional
 from datetime import date
 
 
@@ -8,8 +8,8 @@ class User:
     id: str
     first_name: str
     last_name: str
-    birthdate: date
     email: str
+    birthdate: date
 
 
     def __hash__(self):

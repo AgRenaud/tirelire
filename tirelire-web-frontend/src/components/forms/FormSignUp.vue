@@ -1,5 +1,8 @@
 <script setup>
-  import { ref, reactive } from 'vue'
+  import { reactive, ref } from 'vue';
+  import { useRouter, useRoute } from 'vue-router';
+  import Datepicker from '@vuepic/vue-datepicker';
+  import '@vuepic/vue-datepicker/dist/main.css';
 
   import { useRouter } from "vue-router";
   import { useAuthStore } from "@/stores/useAuth.js";
@@ -9,10 +12,14 @@
   const router = useRouter();
 
 
+  const date = ref();
+  const flow = ref(['year', 'month', 'calendar']);
+
   const formInput = reactive({
     first_name: "",
     last_name: "",
     email: "",
+    birthdate: "",
     password: ""
   })
 
@@ -41,6 +48,10 @@
         <div class="input email">
           <label for='email'>Email</label>
           <input v-model="formInput.email" type='email'>
+        </div>
+        <div class="input birthdate">
+          <label for='birthdate'>Birthdate</label>
+          <Datepicker v-model="formInput.birthdate" :flow="flow" :enableTimePicker="false" />
         </div>
         <div class="input password">
           <label for='password'>Password</label>
@@ -96,5 +107,8 @@
         background: #14985d;
         cursor: pointer;
         transition: 0.15s ease;
+    }
+    .input.birthdate {
+      margin-bottom: 10px;
     }
 </style>
