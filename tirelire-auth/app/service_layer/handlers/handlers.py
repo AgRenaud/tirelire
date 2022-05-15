@@ -14,9 +14,6 @@ def create_user(
             new_user = model.User(
                 command.id,
                 uow.auth_service.encrypt_password(command.password),
-                command.first_name,
-                command.last_name,
-                command.email,
             )
             uow.users.add(new_user)
         publish("add_user", events.UserAdded(new_user.id))
@@ -38,7 +35,7 @@ def add_app_auth_to_user(
 
 def get_token(command: commands.Authenticate, uow: UnitOfWork) -> dict:
     with uow:
-        user = uow.users.get_by_email(command.email)
+        user = uow.users.get(command.user_id)
         token = uow.auth_service.generate_token(command.password, user)
     return token
 

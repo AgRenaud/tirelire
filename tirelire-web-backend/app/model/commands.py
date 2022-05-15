@@ -1,3 +1,4 @@
+from datetime import date
 from dataclasses import dataclass
 
 
@@ -10,6 +11,7 @@ class Command:
 class Register(Command):
     first_name: str
     last_name: str
+    birthdate: date
     email: str
     password: str
 

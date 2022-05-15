@@ -4,6 +4,7 @@ import logging
 from app import config
 from app.model import commands
 from app.adapters.api import auth
+from app.adapters.api import user
 from app.adapters.session_manager import SessionManager
 
 
@@ -16,15 +17,24 @@ def create_uid() -> str:
 
 class AuthenticationService:
     
-    def __init__(self, auth: auth.AuthGateway, session_manager: SessionManager=None):
+    def __init__(self, auth: auth.AuthGateway, user: user.UserGateway, session_manager: SessionManager=None):
         self.auth_service = auth
+        self.user_service = user
         self.session_manager = session_manager
 
     def register(self, cmd: commands.Register):
-        return self.auth_service.register(
+        uid = create_uid()
+
+        self.user_service.register(
+            uid,
             cmd.first_name,
             cmd.last_name,
+            cmd.birthdate.isoformat(),
             cmd.email,
+        )
+
+        self.auth_service.register(
+            uid,
             cmd.password
         )
 
