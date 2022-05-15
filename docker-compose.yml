@@ -80,6 +80,7 @@ services:
     environment: 
       <<: *tirelire-common-env
       AUTH_SERVICE_URL: http://auth-api:8000
+      USER_SERVICE_URL: http://user-api:8000
       SESSION_MANAGER_HOST: session-manager
       SESSION_MANAGER_PORT: "6379"
       SESSION_MANAGER_PASSWORD: "MyRedisPassword"

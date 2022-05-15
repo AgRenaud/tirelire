@@ -5,9 +5,10 @@ from fastapi.security import OAuth2PasswordBearer
 from app import config
 from app.model import commands
 from app.entrypoints.api.routers.v1 import schemas
-from app.adapters.api.auth import AuthTirelire
 from app.service_layer.authentication_service import AuthenticationService
 from app.adapters.session_manager import RedisSessionManager
+
+from app import factory
 
 
 v1_router = APIRouter( prefix='/v1')
@@ -22,16 +23,16 @@ def register(register_form: schemas.Register):
     cmd = commands.Register(
         register_form.first_name,
         register_form.last_name,
+        register_form.birthdate,
         register_form.email,
         register_form.password
     )
 
-    # Init necessary service
     auth_service = AuthenticationService(
-        AuthTirelire(config.get_auth_uri())
+        factory.AUTH_SERVICE_FACTORY(),
+        factory.USER_SERVICE_FACTORY()
     )
 
-    # Process command
     res = auth_service.register(cmd)
     
     if not res:
@@ -41,19 +42,16 @@ def register(register_form: schemas.Register):
 
 @v1_router.post('/login')
 def login(register_form: schemas.Login, response: Response):
-    # Parse command
     cmd = commands.Login(
         register_form.email,
         register_form.password
     )
 
-    # Init necessary service
     auth_service = AuthenticationService(
-        AuthTirelire(config.get_auth_uri()),
-        RedisSessionManager(*config.get_redis_session_manager_conf())
+        factory.AUTH_SERVICE_FACTORY(),
+        factory.SESSION_MANAGER_FACTORY()
     )
 
-    # Process command
     session_id = auth_service.login(cmd)
     
     response.set_cookie(key="tirelire-session", value=session_id)
@@ -70,8 +68,8 @@ def logout(request: Request, oauth2_scheme: str = Depends(oauth2_scheme)):
 
     # Init necessary service
     auth_service = AuthenticationService(
-        AuthTirelire(config.get_auth_uri()),
-        RedisSessionManager(*config.get_redis_session_manager_conf())
+        factory.AUTH_SERVICE_FACTORY(),
+        factory.SESSION_MANAGER_FACTORY()
     )
 
     auth_service.logout(cmd)

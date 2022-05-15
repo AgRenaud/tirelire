@@ -12,9 +12,6 @@ class Command:
 class CreateUser(Command):
     id: str
     password: str
-    first_name: str
-    last_name: str
-    email: str
 
 
 @dataclass
@@ -25,7 +22,7 @@ class AddAuthorizationToUser(Command):
 
 @dataclass
 class Authenticate(Command):
-    email: str
+    user_id: str
     password: str
 
 
