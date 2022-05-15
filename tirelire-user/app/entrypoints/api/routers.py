@@ -1,7 +1,8 @@
 import uuid
 import logging
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import HTTPBearer
 
 from app.entrypoints.api import schema
 from app.domain import commands, model
@@ -14,6 +15,8 @@ logger = logging.getLogger(__name__)
 
 uow = bootstrap()
 
+bearer_token = HTTPBearer()
+
 router = APIRouter()
 
 
@@ -21,13 +24,13 @@ def create_id() -> str:
     return str(uuid.uuid4())
 
 
-@router.post("/")
-def create_user(new_user: schema.User):
+@router.post("/users/")
+def register(new_user: schema.User):
     cmd = commands.CreateUser(
-        id=create_id(),
-        password=new_user.password,
+        id=new_user.id,
         first_name=new_user.first_name,
         last_name=new_user.last_name,
+        birthdate=new_user.birthdate,
         email=new_user.email,
         
     )
@@ -41,26 +44,9 @@ def create_user(new_user: schema.User):
         raise HTTPException(status_code=500, detail="Unexpected error")
 
 
-@router.post("/authenticate")
-def authenticate(form: schema.Authentication):
-    cmd = commands.Authenticate(
-        email=form.email,
-        password=form.password,
-    )
-    return handlers.get_token(cmd, uow)
-
-
-@router.post("/verify_token")
-def verify_token(form: schema.TokenVerification):
-    cmd = commands.VerifyToken(
-        token=form.token,
-    )
-    return handlers.verify_token(cmd, uow)
-
-
-@router.post("/verify_token")
-def verify_token(form: schema.TokenVerification):
-    cmd = commands.VerifyToken(
-        token=form.token,
-    )
-    return handlers.verify_token(cmd, uow)
+@router.get("/users/me")
+def get_currnet_user(bearer: str = Depends(bearer_token)):
+    return {
+        "first_name": "John",
+        "last_name": "Doe"
+    }

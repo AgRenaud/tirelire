@@ -12,11 +12,11 @@ def create_user(
     try:
         with uow:
             new_user = model.User(
-                command.id,
-                command.birthdate,
-                command.first_name,
-                command.last_name,
-                command.email,
+                id=command.id,
+                first_name=command.first_name,
+                last_name=command.last_name,
+                birthdate=command.birthdate,
+                email=command.email,
             )
             uow.users.add(new_user)
         publish("add_user", events.UserAdded(new_user.id))
