@@ -22,13 +22,10 @@ def create_id() -> str:
 
 
 @router.post("/create_user")
-def create_user(new_user: schema.User):
+def create_user(new_user: schema.CreateUser):
     cmd = commands.CreateUser(
-        id=create_id(),
-        password=new_user.password,
-        first_name=new_user.first_name,
-        last_name=new_user.last_name,
-        email=new_user.email,
+        id=new_user.user_id,
+        password=new_user.password
     )
     try:
         return handlers.create_user(cmd, uow, publish)
@@ -43,7 +40,7 @@ def create_user(new_user: schema.User):
 @router.post("/authenticate")
 def authenticate(form: schema.Authentication):
     cmd = commands.Authenticate(
-        email=form.email,
+        user_id=form.user_id,
         password=form.password,
     )
     return handlers.get_token(cmd, uow)

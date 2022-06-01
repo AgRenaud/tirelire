@@ -37,9 +37,6 @@ users = Table(
     mapper_registry.metadata,
     Column("id", Text, primary_key=True),
     Column("password", Text),
-    Column("first_name", Text),
-    Column("last_name", Text),
-    Column("email", Text, unique=True),
     Column(
         "updated_at",
         DateTime,
