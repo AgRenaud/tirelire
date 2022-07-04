@@ -1,11 +1,12 @@
-from unittest import TestCase
+import pytest
+
 from typing import List
 from datetime import date
 
 from app import bootstrap
 from app.domain import commands
 from app.domain.model import Holder
-from app.adapters.repository import  HolderRepository
+from app.domain.repository import  HolderRepository
 from app.service_layer.unit_of_work import AbstractUnitOfWork
 
 
@@ -44,7 +45,7 @@ def bootstrap_test_app():
     )
 
 
-class TestCommandHandlers(TestCase):
+class TestCommandHandlers:
     """Test
     add_holder
     add_account
@@ -54,14 +55,16 @@ class TestCommandHandlers(TestCase):
     def test_add_holder_must_commit(self):
         bus = bootstrap_test_app()
         bus.handle(commands.CreateHolder("id12345"))
-        self.assertIsNotNone(bus.uow.holders.get("id12345"))
+
+        assert bus.uow.holders.get("id12345") is not None
 
 
     def test_add_account_must_commit(self):
         bus = bootstrap_test_app()
         bus.handle(commands.CreateHolder("holder_id1234"))
         bus.handle(commands.CreateAccount("holder_id1234", "account_id1234", "EUR"))
-        self.assertEqual(1, len(bus.uow.holders.get("holder_id1234").accounts))
+
+        assert len(bus.uow.holders.get("holder_id1234").accounts) == 1
 
     def test_add_operations_must_commit(self):
         bus = bootstrap_test_app()
@@ -75,4 +78,5 @@ class TestCommandHandlers(TestCase):
                 commands.AddOperation("b123", date(2022, 2, 9), 1234.78, "EUR")
             ]
         ))
-        self.assertEqual(2, len(bus.uow.holders.get("holder_id1234").get_account_by_id("account_id1234").operations))
+        
+        assert len(bus.uow.holders.get("holder_id1234").get_account_by_id("account_id1234").operations) == 2

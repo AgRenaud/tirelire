@@ -1,5 +1,7 @@
 import logging
+
 from typing import Callable, Dict, List, Union, Type, TYPE_CHECKING
+
 from app.domain import commands, events
 from app.service_layer import unit_of_work
 

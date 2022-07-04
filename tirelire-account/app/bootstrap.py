@@ -1,13 +1,13 @@
 import inspect
 from typing import Callable
-from app.adapters import orm, event_publisher
+from app.adapters import orm
 from app.service_layer import handlers, messagebus, unit_of_work
 
 
 def bootstrap(
+    uow: unit_of_work.AbstractUnitOfWork,
+    publish: Callable,
     start_orm: bool = True,
-    uow: unit_of_work.AbstractUnitOfWork = unit_of_work.SQLAlchemyUnitOfWorkImplem(),
-    publish: Callable = event_publisher.publish,
 ) -> messagebus.MessageBus:
 
     if start_orm:

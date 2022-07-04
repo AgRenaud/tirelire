@@ -3,9 +3,6 @@ name = "tirelire-app"
 version = "0.0.1"
 description = ""
 authors = ["AgRenaud <renaud.aguirrechambilla@gmail.com>"]
-packages = [
-  { include = "scripts.py", from = "../libs-dev"}
-]
 
 [tool.poetry.dependencies]
 python = "3.10.0"
@@ -33,10 +30,17 @@ bandit = "^1.7.4"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry.scripts]
-test = 'scripts:test'
-report = 'scripts:report'
-format = 'scripts:format'
+[tool.poe.tasks]
+
+  [tool.poe.tasks.fmt]
+  help = "Run black on the code base"
+  cmd  = "black app"
+
+  [tool.poe.tasks.test]
+  help = "Run test coverage on the code base and display the coverage's report"
+  shell = """
+    CONFIG_PATH=tests/test_config.yaml pytest --cov=app --doctest-modules tests/
+  """
 
 [tool.coverage.run]
 source=['app']
