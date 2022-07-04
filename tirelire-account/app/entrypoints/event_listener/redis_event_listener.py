@@ -1,27 +1,30 @@
-import json
 import logging
 import redis
 
 from uuid import uuid4
 
 from app import bootstrap, config
-from app.adapters.redis_event_publisher import RedisConnector
+from app.service_layer import messagebus
+from app.adapters.event_publisher import RedisConnector
 
 logger = logging.getLogger(__name__)
 
 
-redis_pool = redis.ConnectionPool(**config.get_redis_config(), decode_responses=True)
-r = redis.Redis(connection_pool=redis_pool, decode_responses=True, charset='utf-8')
-redis_conn = RedisConnector(r)
-
 GROUP_NAME = "auth_service"
+
 STREAMS = {
     "add_user": ">"
 }
 
 def main():
     logger.info("Start redis listener")
-    bus = bootstrap.bootstrap()
+
+    redis_pool = redis.ConnectionPool(**config.get_redis_config(), decode_responses=True)
+    r = redis.Redis(connection_pool=redis_pool, decode_responses=True, charset='utf-8')
+    redis_conn = RedisConnector(r)
+
+    bus = bootstrap.bootstrap(start_orm=False)
+
     try:
         r.xgroup_create('add_user', GROUP_NAME, "$", True)
     except redis.exceptions.ResponseError as e:
@@ -38,11 +41,10 @@ def main():
         
 
 
-def handle_events(event, bus):
-    stream, message = event
-    print(str(stream))
-    print(message)
-
+def handle_events(event, bus: messagebus.MessageBus):
+    stream, messages = event
+    for message in messages:
+        bus.handle(message)
 
 if __name__ == "__main__":
     main()
