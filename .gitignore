@@ -4,7 +4,7 @@ __pycache__/
 .audit
 .vscode/
 .ipynb_checkpoints/
-
+.pytest_cache/
 .DS_Store
 node_modules
 /dist
