@@ -1,6 +1,3 @@
-from typing import List, Callable
-from uuid import uuid4
-
 from app.domain import commands
 from app.domain.model import Holder, Account, Operation, Currency, Category
 from app.service_layer.unit_of_work import AbstractUnitOfWork
