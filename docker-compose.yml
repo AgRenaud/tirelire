@@ -74,6 +74,21 @@ services:
     depends_on:
       - postgres
       - broker
+  account-event-listener:
+    build: 
+      context: ./tirelire-account
+    environment: 
+      <<: *tirelire-common-env
+      POSTGRES_DB: "tirelire_account"
+
+    command: [
+      "python", "-m", "app.entrypoints.event_listener.redis_event_listener"
+      ]
+    volumes:
+      - "./tirelire-account/app:/app"
+    depends_on:
+      - postgres
+      - broker
   backend:
     build:
       context: ./tirelire-web-backend
