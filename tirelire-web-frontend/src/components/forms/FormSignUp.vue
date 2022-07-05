@@ -18,6 +18,9 @@
   const date = ref();
   const flow = ref(['year', 'month', 'calendar']);
 
+  const date = ref();
+  const flow = ref(['year', 'month', 'calendar']);
+
   const formInput = reactive({
     first_name: "",
     last_name: "",
