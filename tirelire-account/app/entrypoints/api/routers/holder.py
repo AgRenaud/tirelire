@@ -1,24 +1,31 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from uuid import uuid4
 
+from app import views
 from app.domain import commands
 from app.entrypoints.api.schemas import input
-from app.service_layer.unit_of_work import SQLAlchemyUnitOfWorkImplem
-from app import views, bootstrap
-
-
-bus = bootstrap.bootstrap()
+from app.adapters.event_publisher import RedisConnector
+from app.service_layer.messagebus import MessageBus
+from app.service_layer.factory import SQL_ALCHEMY_UOW_FACTORY, REDIS_FACTORY
+from app.bootstrap import bootstrap
 
 
 router = APIRouter(prefix="/holders", tags=["holders"])
 
+async def get_event_publisher():
+    r = REDIS_FACTORY()
+    r = RedisConnector(r)
+    return r.publish
+
+async def get_message_bus():
+    return bootstrap(uow=SQL_ALCHEMY_UOW_FACTORY(), publish=await get_event_publisher())
 
 def create_id():
     return str(uuid4())
 
 
 @router.post("/")
-def add_holder():
+def add_holder(bus: MessageBus=Depends(get_message_bus)):
     new_id = create_id()
     cmd = commands.CreateHolder(new_id)
     bus.handle(cmd)
@@ -26,12 +33,12 @@ def add_holder():
 
 
 @router.get("/{holder_id}")
-def get_holder_by_id(holder_id: str):
-    return views.holder.get_holder_by_id(holder_id, SQLAlchemyUnitOfWorkImplem())
+async def get_holder_by_id(holder_id: str, uow=Depends(SQL_ALCHEMY_UOW_FACTORY)):
+    return views.holder.get_holder_by_id(holder_id, uow)
 
 
 @router.post("/{holder_id}/accounts")
-def add_account_to_holder(holder_id: str, input: input.AddAccount):
+async def add_account_to_holder(holder_id: str, input: input.AddAccount, bus: MessageBus=Depends(get_message_bus)):
     new_id = create_id()
     cmd = commands.CreateAccount(holder_id, new_id, input.currency)
     bus.handle(cmd)
@@ -39,20 +46,21 @@ def add_account_to_holder(holder_id: str, input: input.AddAccount):
 
 
 @router.get("/{holder_id}/accounts")
-def get_all_accounts_of_holder(holder_id: str):
-    return views.holder.get_accounts_of_holder(holder_id, SQLAlchemyUnitOfWorkImplem())
+async def get_all_accounts_of_holder(holder_id: str, uow=Depends(SQL_ALCHEMY_UOW_FACTORY)):
+    return views.holder.get_accounts_of_holder(holder_id, uow)
 
 
 @router.get("/{holder_id}/accounts/{account_id}")
-def get_account_by_id(holder_id: str, account_id: str):
-    return views.holder.get_account_by_id(
-        holder_id, account_id, SQLAlchemyUnitOfWorkImplem()
-    )
+async def get_account_by_id(holder_id: str, account_id: str, uow=Depends(SQL_ALCHEMY_UOW_FACTORY)):
+    return views.holder.get_account_by_id(holder_id, account_id, uow)
 
 
 @router.post("/{holder_id}/accounts/{account_id}/operations")
-def add_operations_to_an_account(
-    holder_id: str, account_id: str, input: input.AddOperations
+async def add_operations_to_an_account(
+    holder_id: str,
+    account_id: str,
+    input: input.AddOperations,
+    bus: MessageBus=Depends(get_message_bus),
 ):
     cmds = []
     for operation in input.operations:

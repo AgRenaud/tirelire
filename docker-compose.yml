@@ -19,12 +19,28 @@ services:
       <<: *tirelire-common-env
       POSTGRES_DB: "tirelire_account"
     ports:
-      - "8001:8000"
+      - "8010:8000"
     command: [
       "uvicorn", "app.entrypoints.api.client:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"
       ]
     volumes:
       - "./tirelire-account/app:/app"
+    depends_on:
+      - postgres
+      - broker
+  user-api:
+    build: 
+      context: ./tirelire-user
+    environment: 
+      <<: *tirelire-common-env
+      POSTGRES_DB: "tirelire_user"
+    ports:
+      - "8020:8000"
+    command: [
+      "uvicorn", "app.entrypoints.api.client:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"
+      ]
+    volumes:
+      - "./tirelire-user/app:/app"
     depends_on:
       - postgres
       - broker
@@ -35,7 +51,7 @@ services:
       <<: *tirelire-common-env
       POSTGRES_DB: "tirelire_auth"
     ports:
-      - "8002:8000"
+      - "8030:8000"
     command: [
       "uvicorn", "app.entrypoints.api.client:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"
       ]
@@ -58,12 +74,28 @@ services:
     depends_on:
       - postgres
       - broker
+  account-event-listener:
+    build: 
+      context: ./tirelire-account
+    environment: 
+      <<: *tirelire-common-env
+      POSTGRES_DB: "tirelire_account"
+
+    command: [
+      "python", "-m", "app.entrypoints.event_listener.redis_event_listener"
+      ]
+    volumes:
+      - "./tirelire-account/app:/app"
+    depends_on:
+      - postgres
+      - broker
   backend:
     build:
       context: ./tirelire-web-backend
     environment: 
       <<: *tirelire-common-env
       AUTH_SERVICE_URL: http://auth-api:8000
+      USER_SERVICE_URL: http://user-api:8000
       SESSION_MANAGER_HOST: session-manager
       SESSION_MANAGER_PORT: "6379"
       SESSION_MANAGER_PASSWORD: "MyRedisPassword"
@@ -75,6 +107,7 @@ services:
       - session-manager
       - auth-api
       - account-api
+      - user-api
     command: [
       "uvicorn", "app.entrypoints.api.client:create_app", "--workers", "1", "--host", "0.0.0.0", "--port", "8000", "--reload", "--factory"
       ]

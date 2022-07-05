@@ -1,0 +1,20 @@
+app:
+  secret_key: "my-secret"
+certs:
+  private_key: 
+    path: ./tests/private-test-key.pem
+  public_key: 
+    path: ./tests/public-test-key.pem
+logging:
+  config:
+    path: ./tests/test_logging.ini
+postgres:
+  user: postgres
+  password: 
+  host: 127.0.0.1
+  db_name: test
+  port: 54321
+redis:
+  host: 127.0.0.1
+  port: 65432
+  password: MyRedisPassword

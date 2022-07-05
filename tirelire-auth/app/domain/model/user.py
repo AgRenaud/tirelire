@@ -8,9 +8,6 @@ from app.domain.model.application import App, AppAuthorization
 class User:
     id: str
     password: str
-    first_name: str
-    last_name: str
-    email: str
 
     events = []
 

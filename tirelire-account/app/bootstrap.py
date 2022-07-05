@@ -1,17 +1,29 @@
 import inspect
+
 from typing import Callable
-from app.adapters import orm, event_publisher
-from app.service_layer import handlers, messagebus, unit_of_work
+from sqlalchemy.orm import registry
+from sqlalchemy.exc import ArgumentError
+
+from app import config
+from app.adapters import orm
+from app.service_layer import handlers
+from app.service_layer.messagebus import MessageBus 
+from app.service_layer.unit_of_work import AbstractUnitOfWork
 
 
 def bootstrap(
+    uow: AbstractUnitOfWork,
+    publish: Callable,
     start_orm: bool = True,
-    uow: unit_of_work.AbstractUnitOfWork = unit_of_work.SQLAlchemyUnitOfWorkImplem(),
-    publish: Callable = event_publisher.publish,
-) -> messagebus.MessageBus:
+) -> MessageBus:
 
     if start_orm:
-        orm.start_mappers()
+        mapper_registry = registry()
+        try:
+            orm.start_mappers(mapper_registry)
+        except ArgumentError:
+            print("Mapper already exists")
+        orm.set_up_db(config.get_postgres_uri(), mapper_registry)
 
     dependencies = {"uow": uow, "publish": publish}
     injected_event_handlers = {
@@ -25,7 +37,7 @@ def bootstrap(
         for command_type, handler in handlers.COMMAND_HANDLERS.items()
     }
 
-    return messagebus.MessageBus(
+    return MessageBus(
         uow=uow,
         event_handlers=injected_event_handlers,
         command_handlers=injected_command_handlers,

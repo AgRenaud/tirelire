@@ -26,6 +26,7 @@ unittest = "^0.0"
 parameterized = "^0.8.1"
 "testing.redis" = "^1.1.1"
 black = "^22.1.0"
+bandit = "^1.7.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

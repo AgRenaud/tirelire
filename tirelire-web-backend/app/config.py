@@ -32,6 +32,13 @@ def get_auth_uri() -> str:
 
     return uri
 
+def get_user_uri() -> str:
+    configuration = get_config()
+
+    uri=configuration['user-service']['uri']
+
+    return uri
+
 def get_redis_session_manager_conf():
     configuration = get_config()
 

@@ -1,4 +1,4 @@
-FROM python:3.9-slim-bullseye as python-base
+FROM python:3.10.0-slim-bullseye as python-base
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -20,7 +20,7 @@ RUN apt update && apt install --no-install-recommends -y \
     curl \
     build-essential
 
-RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/install-poetry.py | python
 
 WORKDIR $PYSETUP_PATH
 COPY poetry.lock pyproject.toml ./
