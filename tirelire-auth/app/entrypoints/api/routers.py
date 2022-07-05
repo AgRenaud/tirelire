@@ -55,3 +55,12 @@ def verify_token(form: schema.TokenVerification):
         token=form.token,
     )
     return handlers.verify_token(cmd, uow)
+
+
+@router.post("/verify_token")
+def verify_token(form: schema.TokenVerification):
+    cmd = commands.VerifyToken(
+        token=form.token,
+    )
+    return handlers.verify_token(cmd, uow)
+

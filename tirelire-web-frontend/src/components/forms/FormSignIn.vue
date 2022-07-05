@@ -1,27 +1,23 @@
 <script setup>
-  import { reactive } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
+  import { ref, reactive } from 'vue';
 
-  import auth from '@/auth'
+  import { useRouter } from "vue-router";
+  import { useAuthStore } from "@/stores/useAuth.js";
 
-  const router = useRouter()
-  const route = useRoute()
+  const loading = ref(false);
+  const router = useRouter();
 
   const formInput = reactive({
     email: "",
     password: ""
   })
 
-  function login () {
-    auth.login(formInput.email, formInput.password, loggedIn => {
-      if (!loggedIn) {
-        this.error = true
-      } else {
-        router.replace(route.query.redirect || '/')
-        router.go()
-      }
-    })
-  }
+  function signIn () {
+        useAuthStore()
+          .login(
+            JSON.stringify(formInput)
+          );
+    }
 </script>
 
 <template>
@@ -36,7 +32,7 @@
           <label for='password'>Password</label>
           <input v-model="formInput.password" type='password'>
         </div>
-        <button class='signup' @click="login()">Sign In</button>
+        <button type="button" class='signin' @click="signIn()">Sign In</button>
       </form>
     </div>
 </template>
@@ -69,7 +65,7 @@
       font-size: 0.75rem;
       font-weight: 500;
   }
-  .signup {
+  .signin {
       display: block;
       width: 100%;
       background-color: #42b983;
@@ -82,7 +78,7 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
   }
-  .signup:hover {
+  .signin:hover {
       background: #14985d;
       cursor: pointer;
       transition: 0.15s ease;

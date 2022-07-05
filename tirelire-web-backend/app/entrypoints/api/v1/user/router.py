@@ -4,19 +4,19 @@ from fastapi.security import OAuth2PasswordBearer
 
 from app import config
 from app.model import commands
-from app.entrypoints.api.routers.v1 import schemas
+from app.entrypoints.api.v1.user import schemas
 from app.adapters.api.auth import AuthTirelire
 from app.service_layer.authentication_service import AuthenticationService
 from app.adapters.session_manager import RedisSessionManager
 
 
-v1_router = APIRouter( prefix='/v1')
+user_router = APIRouter()
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
 
-@v1_router.post('/register')
+@user_router.post('/register')
 def register(register_form: schemas.Register):
     # Parse command
     cmd = commands.Register(
@@ -39,7 +39,7 @@ def register(register_form: schemas.Register):
     return JSONResponse(status_code=201)
 
 
-@v1_router.post('/login')
+@user_router.post('/login')
 def login(register_form: schemas.Login, response: Response):
     # Parse command
     cmd = commands.Login(
@@ -56,11 +56,11 @@ def login(register_form: schemas.Login, response: Response):
     # Process command
     session_id = auth_service.login(cmd)
     
-    response.set_cookie(key="tirelire-session", value=session_id)
+    response.set_cookie(key="tirelire-session", value=session_id, httponly=True, max_age=config.get_session_expires_time())
 
     return True
 
-@v1_router.post('/logout')
+@user_router.post('/logout')
 def logout(request: Request, oauth2_scheme: str = Depends(oauth2_scheme)):
     
     # Parse command
@@ -77,3 +77,12 @@ def logout(request: Request, oauth2_scheme: str = Depends(oauth2_scheme)):
     auth_service.logout(cmd)
 
     return True
+
+@user_router.get('/me')
+def logout(oauth2_scheme: str = Depends(oauth2_scheme)):
+    
+    return {
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "jdoe@mail.com"
+    }

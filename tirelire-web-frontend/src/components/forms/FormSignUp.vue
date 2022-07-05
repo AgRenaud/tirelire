@@ -1,11 +1,13 @@
 <script setup>
-  import { reactive } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
+  import { ref, reactive } from 'vue'
 
-  import auth from '@/auth'
+  import { useRouter } from "vue-router";
+  import { useAuthStore } from "@/stores/useAuth.js";
 
-  const router = useRouter()
-  const route = useRoute()
+
+  const loading = ref(false);
+  const router = useRouter();
+
 
   const formInput = reactive({
     first_name: "",
@@ -15,43 +17,12 @@
   })
 
   function signUp () {
-      const backend_url = import.meta.env.VITE_BACKEND_URL
-      
-      return fetch(
-          backend_url + '/api/v1/register', {
-          method: 'POST',
-          headers: {
-              'content-type': 'application/json'
-          },
-          body: JSON.stringify(formInput)
-        })
-      //  .then(res => {
-      //  // a non-200 response code
-      //  if (!res.ok) {
-      //      // create error instance with HTTP status text
-      //      const error = new Error(res.statusText);
-      //      error.json = res.json();
-      //      throw error;
-      //  }
-      //  return res.json();
-      //  })
-      //  .then(json => {
-      //  // set the response data
-      //  data.value = json.data;
-      //  })
-      //  .catch(err => {
-      //  error.value = err;
-      //  // In case a custom JSON error response was provided
-      //  if (err.json) {
-      //      return err.json.then(json => {
-      //      // set the JSON response message
-      //      error.value.message = json.message;
-      //      });
-      //  }
-      //  })
-      //  .then(() => {
-      //  loading.value = false;
-      //  });
+        useAuthStore()
+          .register(
+            JSON.stringify(formInput)
+          )
+          .then(() => router.push({ name: "index" }))
+          .catch(() => (loading.value = !loading.value));
     }
 </script>
 
@@ -75,7 +46,7 @@
           <label for='password'>Password</label>
           <input v-model="formInput.password" type='password'>
         </div>
-        <button class='signup' @click="signUp()">Sign Up</button>
+        <button type="button" class='signup' @click="signUp()">Sign Up</button>
       </form>
     </div>
 </template>

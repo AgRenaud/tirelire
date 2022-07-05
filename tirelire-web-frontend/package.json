@@ -14,8 +14,10 @@
     "axios": "^0.27.2",
     "chart.js": "^3.7.1",
     "core-js": "^3.21.1",
-    "vite": "^2.9.1",
-    "vue": "^3.2.32",
+    "pinia": "^2.0.13",
+    "vite": "^2.9.5",
+    "vue": "^3.2.33",
+    "vue-axios": "^3.4.1",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
