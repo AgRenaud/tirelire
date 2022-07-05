@@ -2,8 +2,10 @@ import logging
 import redis
 
 from uuid import uuid4
+from typing import Tuple
 
 from app import bootstrap, config
+from app.service_layer.factory import SQL_ALCHEMY_UOW_FACTORY 
 from app.service_layer import messagebus
 from app.adapters.event_publisher import RedisConnector
 
@@ -14,17 +16,21 @@ GROUP_NAME = "auth_service"
 
 STREAMS = {"add_user": ">"}
 
-
-def main():
-    logger.info("Start redis listener")
-
+def get_redis_connector() -> Tuple[redis.Redis, RedisConnector]:
     redis_pool = redis.ConnectionPool(
         **config.get_redis_config(), decode_responses=True
     )
     r = redis.Redis(connection_pool=redis_pool, decode_responses=True, charset="utf-8")
     redis_conn = RedisConnector(r)
+    return r, redis_conn
 
-    bus = bootstrap.bootstrap(start_orm=False)
+
+def main():
+    logger.info("Start redis listener")
+
+    r, redis_conn = get_redis_connector()
+
+    bus = bootstrap.bootstrap(uow=SQL_ALCHEMY_UOW_FACTORY(), publish=redis_conn.publish, start_orm=False)
 
     try:
         r.xgroup_create("add_user", GROUP_NAME, "$", True)
