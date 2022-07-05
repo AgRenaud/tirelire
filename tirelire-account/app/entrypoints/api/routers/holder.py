@@ -4,25 +4,32 @@ from uuid import uuid4
 from app import views
 from app.domain import commands
 from app.entrypoints.api.schemas import input
+from app.adapters.event_publisher import RedisConnector
 from app.service_layer.messagebus import MessageBus
-from app.service_layer.factory import SQL_ALCHEMY_UOW_FACTORY, MESSAGE_BUS_FACTORY
+from app.service_layer.factory import SQL_ALCHEMY_UOW_FACTORY, REDIS_FACTORY
+from app.bootstrap import bootstrap
 
 
 router = APIRouter(prefix="/holders", tags=["holders"])
 
+async def get_event_publisher():
+    r = REDIS_FACTORY()
+    r = RedisConnector(r)
+    return r.publish
+
 async def get_message_bus():
-    return MESSAGE_BUS_FACTORY(uow=SQL_ALCHEMY_UOW_FACTORY())
+    return bootstrap(uow=SQL_ALCHEMY_UOW_FACTORY(), publish=await get_event_publisher())
 
 def create_id():
     return str(uuid4())
 
 
-# @router.post("/")
-# def add_holder():
-#     new_id = create_id()
-#     cmd = commands.CreateHolder(new_id)
-#     bus.handle(cmd)
-#     return {"holder_id": new_id}
+@router.post("/")
+def add_holder(bus: MessageBus=Depends(get_message_bus)):
+    new_id = create_id()
+    cmd = commands.CreateHolder(new_id)
+    bus.handle(cmd)
+    return {"holder_id": new_id}
 
 
 @router.get("/{holder_id}")
