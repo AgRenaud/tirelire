@@ -1,6 +1,7 @@
 import logging
+from re import M
 
-from typing import Callable, Dict, List, Union, Type, TYPE_CHECKING
+from typing import Callable, Dict, List, Type, TYPE_CHECKING
 
 from app.domain import commands, events
 from app.service_layer import unit_of_work
@@ -8,10 +9,13 @@ from app.service_layer import unit_of_work
 
 logger = logging.getLogger(__name__)
 
-Message = Union[commands.Command, events.Event]
+Message = commands.Command | events.Event
 
 
 class MessageBus:
+
+    queue: List[Message]
+
     def __init__(
         self,
         uow: unit_of_work.AbstractUnitOfWork,
