@@ -27,8 +27,7 @@ export const useAuthStore = defineStore(
       },
 
       async logout() {
-        const response = (await axios.post(
-          "/api/v1/user/logout")).data;
+        const response = (await axios.post("/api/v1/user/logout")).data;
 
         if (response) {
           this.$reset();

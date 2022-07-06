@@ -3,33 +3,26 @@
   import { useRouter, useRoute } from 'vue-router';
   import Datepicker from '@vuepic/vue-datepicker';
   import '@vuepic/vue-datepicker/dist/main.css';
-
-  import { useRouter } from "vue-router";
+  import dateFormat from 'dateformat'
   import { useAuthStore } from "@/stores/useAuth.js";
 
 
   const loading = ref(false);
   const router = useRouter();
 
-
-  const date = ref();
-  const flow = ref(['year', 'month', 'calendar']);
-
-  const date = ref();
-  const flow = ref(['year', 'month', 'calendar']);
-
   const date = ref();
   const flow = ref(['year', 'month', 'calendar']);
 
   const formInput = reactive({
-    first_name: "",
-    last_name: "",
-    email: "",
-    birthdate: "",
-    password: ""
+    first_name: null,
+    last_name: null,
+    email: null,
+    birthdate: null,
+    password: null
   })
 
   function signUp () {
+        formInput.birthdate = dateFormat(formInput.birthdate, "yyyy-mm-dd")
         useAuthStore()
           .register(
             JSON.stringify(formInput)
