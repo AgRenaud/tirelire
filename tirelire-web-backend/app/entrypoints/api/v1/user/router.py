@@ -35,7 +35,7 @@ def register(register_form: schemas.Register):
     )
 
     res = auth_service.register(cmd)
-    
+    print(res) 
     if not res:
         return JSONResponse(status_code=503)
     return JSONResponse(status_code=201)

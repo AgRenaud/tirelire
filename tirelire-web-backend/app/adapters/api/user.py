@@ -1,17 +1,21 @@
+import logging
 import requests
 
 from datetime import date
 from typing import Protocol
 
 
+logger = logging.getLogger(__name__)
+
+
 class UserGateway(Protocol):
     url: str
 
     def register(self, uid: str, first_name: str, last_name: str, birthdate: date, email: str):
-        raise NotImplementedError
+        ...
 
     def get_current_user(self):
-        raise NotImplementedError
+        ...
 
 
 class UserTirelire:
@@ -21,7 +25,7 @@ class UserTirelire:
     def __init__(self, url: str):
         self.url = url
 
-    def register(self, uid: str, first_name: str, last_name: str, birthdate: date, email: str) -> None:
+    def register(self, uid: str, first_name: str, last_name: str, birthdate: date, email: str) -> bool:
         url = f"{self.url}/api/v1/users/"
         
         payload = {
@@ -35,6 +39,7 @@ class UserTirelire:
         req = requests.post(url, json=payload)
 
         if not req.ok:
+            logger.critical(f"Error on call to user-api : {req.status_code} => {req.content}")
             raise RuntimeError('Unable to create User')
 
     def get_current_user(self):
