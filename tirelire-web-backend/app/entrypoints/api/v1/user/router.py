@@ -34,8 +34,8 @@ def register(register_form: schemas.Register):
         factory.USER_SERVICE_FACTORY()
     )
 
+
     res = auth_service.register(cmd)
-    print(res) 
     if not res:
         return JSONResponse(status_code=503)
     return JSONResponse(status_code=201)

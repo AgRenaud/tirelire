@@ -26,36 +26,42 @@ class AuthenticationService:
 
     def register(self, cmd: commands.Register):
         with self.uow:
-            uid = create_uid()
+            user_id = create_uid()
 
-            self.user_service.register(
-                uid,
-                cmd.first_name,
-                cmd.last_name,
-                cmd.birthdate.isoformat(),
-                cmd.email,
-            )
+            try:
+                self.user_service.register(
+                    user_id,
+                    cmd.first_name,
+                    cmd.last_name,
+                    cmd.birthdate.isoformat(),
+                    cmd.email,
+                )
+            except RuntimeError:
+                # TODO: Create an event DeleteAuthUser( uid=uid ) to ensure atomicity
+                logger.fatal(f'Unable to register the client : {user_id} on user_service')
 
-            self.auth_service.register(
-                uid,
-                cmd.password
-            )
-        if self.uow:
-            return True
-        else:
-            return False
+            try: 
+                self.auth_service.register(
+                    user_id,
+                    cmd.password
+                )
+            except RuntimeError:
+                # TODO: Create an event DeleteAuthUser( uid=uid ) to ensure atomicity
+                logger.fatal(f"Unable to register the client : {user_id} on auth service")
+        
+        if not self.uow:
+            raise RuntimeError(f'Unable to register the client with {user_id}')
 
     def login(self, cmd: commands.Login):
         with self.uow:
             auth = self.auth_service.authenticate(cmd.email, cmd.password)
             token = auth.get('access_token')
-            uid = create_uid()
+            session_id = create_uid()
 
-            self.session_manager.create_session(uid, token, config.get_session_expires_time())
-        if self.uow:
-            return uid
-        else:
-            raise Exception
+            self.session_manager.create_session(session_id, token, config.get_session_expires_time())
+        
+        if not self.uow:
+            raise RuntimeError(f'User {cmd.email} is unable to log in')
 
     def logout(self, cmd: commands.Logout):
         self.session_manager.delete_session(cmd.session_id)
