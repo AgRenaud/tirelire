@@ -8,7 +8,7 @@ FROM develop-stage as build-stage
 WORKDIR /app
 RUN npm run build
 
-FROM nginx:1.23.1-alpine as production-stage
+FROM nginx:1.25.4-alpine as production-stage
 ENV NGINX_HOST=localhost\
     NGINX_PORT_HTTP=80
 COPY --from=build-stage /app/dist /usr/share/nginx/html
